@@ -176,7 +176,7 @@ async function loadProducts() {
     products.forEach((product) => {
       const card = `
         <div class="product-card fade-in">
-          <img src="${product.image}" alt="${product.name}" class="product-image" />
+          <img src="/images/${product.name}.jpg" alt="${product.name}" class="product-image" />
           <h3>${product.name}</h3>
           <p>${product.shortDescription}</p>
           <div class="product-overlay">
