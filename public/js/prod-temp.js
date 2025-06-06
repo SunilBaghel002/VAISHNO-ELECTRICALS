@@ -145,9 +145,9 @@ async function loadProduct() {
             : "item"
         }`
       : "/ unit";
-    document.getElementById("productImage").src =
-      product.image || "/images/placeholder.jpg";
-    document.getElementById("productImage").alt = product.name;
+    document.getElementById("productImage").src =`
+      product.image || "/images/${product.name}.jpg";
+    document.getElementById("productImage").alt = product.name;`
     document.getElementById("productDescription").textContent =
       product.description;
     const featuresList = document.getElementById("productFeatures");
