@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - VAISHNO ELECTRICALS</title>
+    <link rel="shortcut icon" href="/images/logo.svg" type="image/x-icon">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/prod-temp.css">
+  </head>
+  <body>
+    <div class="admin-prompt" id="adminPrompt">
+      <div class="prompt-box">
+        <h3>Enter Admin Password</h3>
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Password"
+          aria-label="Admin Password"
+        />
+        <button onclick="authenticateAdmin()">Submit</button>
+      </div>
+    </div>
+    <div class="modal" id="enquiryModal">
+      <div class="modal-content">
+        <span class="close">×</span>
+        <h3>Enquiry Form</h3>
+        <form id="enquiryForm">
+          <div class="success-message" id="enquirySuccess">
+            Enquiry sent successfully!
+          </div>
+          <div class="form-loading" id="enquiryLoading"></div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="enquiryName"
+              name="name"
+              placeholder=" "
+              required
+              aria-label="Full Name"
+            />
+            <label for="enquiryName"
+              ><i class="fas fa-user"></i> Full Name</label
+            >
+            <div class="error-message">Please enter your name</div>
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="enquiryEmail"
+              name="email"
+              placeholder=" "
+              required
+              aria-label="Email Address"
+            />
+            <label for="enquiryEmail"
+              ><i class="fas fa-envelope"></i> Email Address</label
+            >
+            <div class="error-message">Please enter a valid email</div>
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              id="enquiryPhone"
+              name="phone"
+              placeholder=" "
+              required
+              pattern="[0-9]{10}"
+              aria-label="Phone Number"
+            />
+            <label for="enquiryPhone"
+              ><i class="fas fa-phone"></i> Phone Number</label
+            >
+            <div class="error-message">
+              Please enter a valid 10-digit phone number
+            </div>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="enquiryProduct"
+              name="product"
+              placeholder=" "
+              readonly
+              aria-label="Product Name"
+            />
+            <label for="enquiryProduct"
+              ><i class="fas fa-box"></i> Product</label
+            >
+          </div>
+          <div class="form-group">
+            <textarea
+              id="enquiryMessage"
+              name="message"
+              placeholder=" "
+              required
+              aria-label="Message"
+            ></textarea>
+            <label for="enquiryMessage"
+              ><i class="fas fa-comment"></i> Message</label
+            >
+            <div class="error-message">Please enter your message</div>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> Send Enquiry
+          </button>
+        </form>
+      </div>
+    </div>
+    <header id="header">
+      <nav>
+        <div class="logo">
+          <img src="/images/logo.svg" alt="" />
+          <p class="gstin">GSTIN: 06CROPS7313B1ZQ</p>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/">Home</a></li>
+          <li><a href="/#about">About</a></li>
+          <li class="nav-item">
+            <a href="/products">Products <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown" id="productsDropdown"></ul>
+          </li>
+          <li><a href="/#why-choose">Why Choose Us</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </header>
+    <section class="product-details">
+      <div class="container">
+        <div class="product-image-container fade-in">
+          <img
+            id="productImage"
+            class="product-image-large"
+            src=""
+            alt="Product Image"
+          />
+        </div>
+        <div class="product-info fade-in">
+          <h2 id="productName"></h2>
+          <div class="product-price">
+            Price: <span id="productPrice"></span>
+            <span id="productQuantity" class="unit"></span>
+          </div>
+          <p id="productDescription"></p>
+          <h3>Key Features</h3>
+          <ul class="features-list" id="productFeatures"></ul>
+          <h3>Specifications</h3>
+          <ul class="specs-list" id="productSpecs"></ul>
+          <div class="action-buttons">
+            <button class="enquiry-btn" id="enquiryBtn">
+              <i class="fas fa-question-circle"></i> Enquiry
+            </button>
+            <a
+              href="https://wa.me/919873906044?text=Hello%20VAISHNO%20ELECTRICALS,%20I%20have%20an%20inquiry%20about%20[Product%20Name]"
+              target="_blank"
+              class="whatsapp-btn"
+              id="whatsappLink"
+            >
+              <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="enquiry-section fade-in">
+      <div class="container">
+        <h2>Have Questions?</h2>
+        <p>
+          Reach out to our team for personalized assistance or to request a
+          quote for this product.
+        </p>
+        <button class="enquiry-btn" id="enquiryBtn2">
+          <i class="fas fa-question-circle"></i> Send an Enquiry
+        </button>
+      </div>
+    </section>
+    <section class="material-details fade-in">
+      <div class="container">
+        <h2>Material Specifications</h2>
+        <p id="materialDescription">
+          Our products are crafted with premium materials to ensure durability
+          and safety. Specific details such as material type, coating, and
+          standards are tailored to meet industry requirements, providing
+          reliable performance in various environments.
+        </p>
+        <button class="enquiry-btn" id="enquiryBtn3">
+          <i class="fas fa-question-circle"></i> Enquire Now
+        </button>
+      </div>
+    </section>
+    <section id="contact" class="contact fade-in">
+      <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+          Ready to enhance your electrical safety? Contact our experts for
+          personalized solutions and competitive pricing.
+        </p>
+        <div class="contact-container">
+          <div class="contact-info fade-in">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Phone Number</h4>
+                <p>+91-9873906044 , +91-9810110903</p>
+                <small style="color: #888"
+                  >Available 24/7 for emergencies</small
+                >
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Email Address</h4>
+                <p>vaishnoelectricals2@gmail.com</p>
+                <small style="color: #888">Response within 2 hours</small>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Office Address</h4>
+                <p>
+                  NEAR SHIV MANDIR, GROUND FLOOR, 1-C-9A,B.P,<br />
+                  BATA HARDWARE ROAD, Faridabad, Faridabad, Haryana, 121001
+                </p>
+                <a
+                  href="https://www.google.com/maps/place/28.395989975789417,77.31461497548826"
+                  target="_blank"
+                  >Visit for consultations</a
+                >
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Business Hours</h4>
+                <p>Monday - Saturday: 9:00 AM - 6:00 PM<br />Sunday: Closed</p>
+                <small style="color: #888">24/7 emergency support</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form fade-in">
+            <h3
+              style="color: #1e40af; margin-bottom: 1.5rem; text-align: center"
+            >
+              Send us a Message
+            </h3>
+            <form id="contactForm">
+              <div class="form-loading" id="contactLoading">
+                <div class="spinner"></div>
+              </div>
+              <div class="success-message" id="contactSuccess">
+                Message sent successfully!
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder=" "
+                  required
+                  aria-label="Full Name"
+                />
+                <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                <span class="error-message">Please enter your name</span>
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder=" "
+                  required
+                  aria-label="Email Address"
+                />
+                <label for="email"
+                  ><i class="fas fa-envelope"></i> Email Address</label
+                >
+                <span class="error-message">Please enter a valid email</span>
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder=" "
+                  required
+                  pattern="[0-9]{10}"
+                  aria-label="Phone Number"
+                />
+                <label for="phone"
+                  ><i class="fas fa-phone"></i> Phone Number</label
+                >
+                <span class="error-message"
+                  >Please enter a valid 10-digit phone number</span
+                >
+              </div>
+
+              <div class="form-group">
+                <select
+                  id="inquiry"
+                  name="inquiry"
+                  required
+                  aria-label="Inquiry Type"
+                >
+                  <option value="" disabled selected></option>
+                  <option value="product">Product Inquiry</option>
+                  <option value="installation">Installation Services</option>
+                  <option value="consultation">Technical Consultation</option>
+                  <option value="other">Other</option>
+                </select>
+                <label for="inquiry"
+                  ><i class="fas fa-tag"></i> Inquiry Type</label
+                >
+                <span class="error-message">Please select an inquiry type</span>
+              </div>
+
+              <div class="form-group">
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder=" "
+                  required
+                  aria-label="Message"
+                ></textarea>
+                <label for="message"
+                  ><i class="fas fa-comment"></i> Message</label
+                >
+                <span class="error-message">Please enter your message</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                  <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+                <a
+                  href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20your%20products/services."
+                  target="_blank"
+                  class="whatsapp-btn"
+                >
+                  <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <img src="/images/logo.svg" alt="" />
+          <p>
+            Leading provider of advanced earthing and lightning protection
+            solutions. Protecting lives and property through superior electrical
+            safety systems since 2010.<br />
+            <strong>GSTIN: 06CROPS7313B1ZQ</strong>
+          </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#about">About Us</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/#why-choose">Why Choose Us</a></li>
+            <li><a href="/#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Our Products</h3>
+          <ul id="footerProducts"></ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Information</h3>
+          <p>
+            <i class="fas fa-map-marker-alt"></i> NEAR SHIV MANDIR, GROUND
+            FLOOR, 1-C-9A,B.P, BATA HARDWARE ROAD, Faridabad, Faridabad,
+            Haryana, 121001
+          </p>
+          <p><i class="fas fa-phone"></i> +91-9873906044, +91-9810110903</p>
+          <p><i class="fas fa-envelope"></i> vaishnoelectricals2@gmail.com</p>
+          <p><i class="fas fa-clock"></i> Mon-Sat: 9AM-6PM</p>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <ul>
+          <li>
+            <a href="/" class="active"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li>
+            <a href="/#about"><i class="fas fa-info-circle"></i> About</a>
+          </li>
+          <li>
+            <a href="/products"><i class="fas fa-box"></i> Products</a>
+          </li>
+          <li>
+            <a href="/#contact"><i class="fas fa-question-circle"></i> Query</a>
+          </li>
+          <li>
+            <a href="/#contact"><i class="fas fa-envelope"></i> Contact</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          © 2025 VAISHNO ELECTRICALS. All rights reserved. | Designed with ❤️
+          for electrical safety
+        </p>
+      </div>
+    </footer>
+    <a
+      href="https://wa.me/919873906044?text=Hello%20there,%20I'm%20interested%20in%20learning%20more%20about%20your%20products%20target%20=%20%22_blank%22"
+      target="_blank"
+      class="whatsapp-float"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button class="scroll-top" type="button" id="scrollBtn">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <script src="/js/prod-temp.js"></script>
+  </body>
+</html>

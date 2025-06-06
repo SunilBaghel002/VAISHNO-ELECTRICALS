@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAISHNO ELECTRICALS - Advanced Earthing Solutions</title>
+    <link rel="shortcut icon" href="/images/logo.svg" type="image/x-icon">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/universal.css">
+  </head>
+  <body>
+    <!-- Admin Password Prompt -->
+    <div class="admin-prompt" id="adminPrompt">
+      <div class="prompt-box">
+        <h3>Enter Admin Password</h3>
+        <input type="password" id="adminPassword" placeholder="Password" />
+        <button onclick="authenticateAdmin()">Submit</button>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+      <nav>
+        <div class="logo">
+          <img src="/images/logo.svg" alt="">
+          <p class="gstin">GSTIN: 06CROPS7313B1ZQ</p>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li class="nav-item">
+            <a href="/products">Products <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown" id="productsDropdown"></ul>
+          </li>
+          <li><a href="#why-choose">Why Choose Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="background"></div>
+      <div class="background1"></div>
+      <div class="floating-elements">
+        <i class="fas fa-bolt floating-icon" style="font-size: 2.5rem"></i>
+        <i class="fas fa-shield-alt floating-icon" style="font-size: 2rem"></i>
+        <i class="fas fa-cog floating-icon" style="font-size: 1.8rem"></i>
+        <i
+          class="fas fa-lightning-bolt floating-icon"
+          style="font-size: 2rem"
+        ></i>
+      </div>
+      <div class="hero-container">
+        <p class="tagline">India's #1 Earthing Solutions Provider</p>
+        <h1>Protecting Lives with Advanced Earthing Solutions</h1>
+        <p class="subtitle">
+          Your trusted partner in electrical safety since 2010. We deliver
+          premium earthing and lightning protection systems that ensure absolute
+          safety and reliability for your electrical installations.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">Projects Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Trusted Clients</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Support Available</span>
+          </div>
+        </div>
+
+        <div class="cta-buttons">
+          <a href="#contact" class="cta-primary">
+            <i class="fas fa-phone"></i> Get Quote Now
+          </a>
+          <a href="/products" class="cta-secondary">
+            <i class="fas fa-eye"></i> View Products
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search products..."
+      />
+      <ul class="search-suggestions" id="searchSuggestions"></ul>
+    </div>
+
+    <!-- Services Banner -->
+    <section class="services-banner">
+      <div class="services-grid">
+        <div class="service-item">
+          <i class="fas fa-shipping-fast"></i>
+          <div class="service-text">
+            <h4>Fast Delivery</h4>
+            <p>Quick delivery across NCR</p>
+          </div>
+        </div>
+        <!-- <div class="service-item">
+          <i class="fas fa-certificate"></i>
+          <div class="service-text">
+            <h4>Certified Products</h4>
+            <p>ISI & ISO certified quality</p>
+          </div>
+        </div> -->
+        <div class="service-item">
+          <i class="fas fa-tools"></i>
+          <div class="service-text">
+            <h4>Expert Setup</h4>
+            <p>Professional installation</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <i class="fas fa-headset"></i>
+          <div class="service-text">
+            <h4>24/7 Support</h4>
+            <p>Round-the-clock assistance</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">About VAISHNO ELECTRICALS</h2>
+        <p class="section-subtitle">
+          Leading the industry in electrical safety solutions with cutting-edge
+          technology and unmatched expertise.
+        </p>
+
+        <div class="about-content">
+          <div class="about-text fade-in">
+            <p>
+              Since 2010, VAISHNO ELECTRICALS has been at the forefront of
+              electrical safety innovation, transforming how businesses and
+              industries approach earthing and lightning protection. Our journey
+              began with a simple yet powerful mission: to create safer
+              electrical environments through superior earthing solutions.
+            </p>
+
+            <p>
+              We have established ourselves as the premier supplier of
+              high-quality earthing and lightning protection systems, carefully
+              sourcing our products from the most trusted and reliable vendors
+              in the industry. Every component we offer undergoes rigorous
+              quality testing to ensure it meets international safety standards.
+            </p>
+
+            <p>
+              Our expertise spans across diverse sectors including industrial
+              complexes, commercial buildings, residential projects, and
+              critical infrastructure. We understand that proper earthing is not
+              just about compliance—it's about protecting lives, safeguarding
+              equipment, and ensuring business continuity.
+            </p>
+
+            <div class="about-features">
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div>
+                  <h4>Expert Team</h4>
+                  <p>Experienced professionals</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                  <h4>Timely Delivery</h4>
+                  <p>On-schedule project completion</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <i class="fas fa-handshake"></i>
+                </div>
+                <div>
+                  <h4>Trusted Partners</h4>
+                  <p>Long-term client relationships</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-stats fade-in">
+            <div class="stats-grid">
+              <div class="stat-box">
+                <span class="number">15+</span>
+                <span class="label">Years in Business</span>
+              </div>
+              <div class="stat-box">
+                <span class="number">600+</span>
+                <span class="label">Projects</span>
+              </div>
+              <div class="stat-box">
+                <span class="number">50+</span>
+                <span class="label">Clients</span>
+              </div>
+              <div class="stat-box">
+                <span class="number">99%</span>
+                <span class="label">Success Rate</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: center">
+              <h3 style="color: #1e40af; margin-bottom: 0.8rem">Our Mission</h3>
+              <p style="color: #666; font-size: 0.95rem">
+                To be the leading provider of innovative earthing solutions that
+                protect lives, preserve property, and ensure electrical safety
+                across all industries through superior products and exceptional
+                service.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+      <div class="container">
+        <h2 class="section-title">Our Premium Products</h2>
+        <p class="section-subtitle">
+          Comprehensive range of high-quality earthing and lightning protection
+          solutions designed for maximum safety and reliability.
+        </p>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section id="why-choose" class="why-choose">
+      <div class="container">
+        <h2 class="section-title">Why Choose VAISHNO ELECTRICALS?</h2>
+        <p class="section-subtitle" style="color: #cbd5e1">
+          Discover what makes us the preferred choice for electrical safety
+          solutions across Delhi NCR and beyond.
+        </p>
+
+        <div class="why-grid">
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-medal"></i>
+            </div>
+            <h3>Proven Expertise</h3>
+            <p>
+              Over 15 years of specialized experience in earthing and lightning
+              protection systems, with a track record of successful
+              installations across diverse industries.
+            </p>
+          </div>
+
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-gem"></i>
+            </div>
+            <h3>Premium Quality</h3>
+            <p>
+              We source only the finest products from trusted vendors, ensuring
+              every component meets international quality standards and safety
+              certifications.
+            </p>
+          </div>
+
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-rocket"></i>
+            </div>
+            <h3>Fast Delivery</h3>
+            <p>
+              Efficient supply chain management ensures prompt delivery across
+              Noida, Delhi NCR, and surrounding regions, minimizing project
+              delays.
+            </p>
+          </div>
+
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h3>Expert Consultation</h3>
+            <p>
+              Our technical experts provide comprehensive consultation services,
+              helping you choose the right earthing solutions for your specific
+              requirements.
+            </p>
+          </div>
+
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Safety First</h3>
+            <p>
+              Safety is our top priority. Every solution we provide is designed
+              to protect lives, equipment, and property from electrical hazards.
+            </p>
+          </div>
+
+          <div class="why-item fade-in">
+            <div class="why-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h3>Reliable Support</h3>
+            <p>
+              Comprehensive after-sales support and maintenance services ensure
+              your earthing systems continue to perform optimally throughout
+              their lifecycle.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+          Ready to enhance your electrical safety? Contact our experts for
+          personalized solutions and competitive pricing.
+        </p>
+
+        <div class="contact-container">
+          <div class="contact-info fade-in">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Phone Number</h4>
+                <p>+91-9873906044 , +91-9810110903</p>
+                <small style="color: #888"
+                  >Available 24/7 for emergencies</small
+                >
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Email Address</h4>
+                <p>vaishnoelectricals2@gmail.com</p>
+                <small style="color: #888">Response within 2 hours</small>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Office Address</h4>
+                <p>
+                  NEAR SHIV MANDIR, GROUND FLOOR, 1-C-9A,B.P,<br />
+                  BATA HARDWARE ROAD, Faridabad, Faridabad, Haryana, 121001
+                </p>
+                <a
+                  href="https://www.google.com/maps/place/28.395989975789417,77.31461497548826"
+                  target="_blank"
+                  >Visit for consultations</a
+                >
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-details">
+                <h4>Business Hours</h4>
+                <p>Monday - Saturday: 9:00 AM - 6:00 PM<br />Sunday: Closed</p>
+                <small style="color: #888">24/7 emergency support</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form fade-in">
+            <h3
+              style="color: #1e40af; margin-bottom: 1.5rem; text-align: center"
+            >
+              Send us a Message
+            </h3>
+            <form id="contactForm">
+              <div class="form-loading" id="contactLoading">
+                <div class="spinner"></div>
+              </div>
+              <div class="success-message" id="contactSuccess">
+                Message sent successfully!
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder=" "
+                  required
+                  aria-label="Full Name"
+                />
+                <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                <span class="error-message">Please enter your name</span>
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder=" "
+                  required
+                  aria-label="Email Address"
+                />
+                <label for="email"
+                  ><i class="fas fa-envelope"></i> Email Address</label
+                >
+                <span class="error-message">Please enter a valid email</span>
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder=" "
+                  required
+                  pattern="[0-9]{10}"
+                  aria-label="Phone Number"
+                />
+                <label for="phone"
+                  ><i class="fas fa-phone"></i> Phone Number</label
+                >
+                <span class="error-message"
+                  >Please enter a valid 10-digit phone number</span
+                >
+              </div>
+
+              <div class="form-group">
+                <select
+                  id="inquiry"
+                  name="inquiry"
+                  required
+                  aria-label="Inquiry Type"
+                >
+                  <option value="" disabled selected></option>
+                  <option value="product">Product Inquiry</option>
+                  <option value="installation">Installation Services</option>
+                  <option value="consultation">Technical Consultation</option>
+                  <option value="other">Other</option>
+                </select>
+                <label for="inquiry"
+                  ><i class="fas fa-tag"></i> Inquiry Type</label
+                >
+                <span class="error-message">Please select an inquiry type</span>
+              </div>
+
+              <div class="form-group">
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder=" "
+                  required
+                  aria-label="Message"
+                ></textarea>
+                <label for="message"
+                  ><i class="fas fa-comment"></i> Message</label
+                >
+                <span class="error-message">Please enter your message</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                  <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+                <a
+                  href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20your%20products/services."
+                  target="_blank"
+                  class="whatsapp-btn"
+                >
+                  <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.547698766098!2d77.31461497548826!3d28.395989975789417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjguMzk1OTg5OTc1Nzg5NDE3LDc3LjMxNDYxNDk3NTQ4ODI2!5e0!3m2!1sen!2sin!4v1729849269708!5m2!1sen!2sin&q=28.395989975789417,77.31461497548826"
+            width="100%"
+            height="300"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            onerror="this.style.display='none'; document.getElementById('mapFallback').style.display='block';"
+          ></iframe>
+          <div
+            id="mapFallback"
+            style="
+              display: none;
+              text-align: center;
+              padding: 1rem;
+              background: #f8fafc;
+            "
+          >
+            <a
+              href="https://www.google.com/maps/place/28.395989975789417,77.31461497548826"
+              target="_blank"
+              >View on Google Maps</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <img src="/images/logo.svg" alt="">
+          <p>
+            Leading provider of advanced earthing and lightning protection
+            solutions. Protecting lives and property through superior electrical
+            safety systems since 2010.
+          </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="#why-choose">Why Choose Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Our Products</h3>
+          <ul id="footerProducts"></ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Contact Info</h3>
+          <p>
+            <i class="fas fa-map-marker-alt"></i> NEAR SHIV MANDIR, GROUND
+            FLOOR, 1-C-9A,B.P, BATA HARDWARE ROAD, Faridabad, Faridabad,
+            Haryana, 121001
+          </p>
+          <p><i class="fas fa-phone"></i> +91-9873906044 , +91-9810110903</p>
+          <p><i class="fas fa-envelope"></i> vaishnoelectricals2@gmail.com</p>
+          <p><i class="fas fa-clock"></i> Mon-Sat: 9AM-6PM</p>
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        <ul>
+          <li>
+            <a href="#home" class="active"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+          </li>
+          <li>
+            <a href="/products" class="highlight"
+              ><i class="fas fa-box"></i> Products</a
+            >
+          </li>
+          <li>
+            <a href="#contact"><i class="fas fa-question-circle"></i> Query</a>
+          </li>
+          <li>
+            <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-bottom">
+        <p>
+          © 2025 VAISHNO ELECTRICALS. All rights reserved. | Designed with ❤️
+          for electrical safety
+        </p>
+      </div>
+    </footer>
+
+    <!-- Enquiry Modal -->
+    <div class="modal" id="enquiryModal">
+      <div class="modal-content">
+        <span class="close">×</span>
+        <h3>Product Enquiry</h3>
+        <form id="enquiryForm">
+          <div class="form-loading" id="enquiryLoading">
+            <div class="spinner"></div>
+          </div>
+          <div class="success-message" id="enquirySuccess">
+            Enquiry sent successfully!
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="enquiryName"
+              name="name"
+              placeholder=" "
+              required
+            />
+            <label for="enquiryName"
+              ><i class="fas fa-user"></i> Full Name</label
+            >
+            <span class="error-message">Please enter your name</span>
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="enquiryEmail"
+              name="email"
+              placeholder=" "
+              required
+            />
+            <label for="enquiryEmail"
+              ><i class="fas fa-envelope"></i> Email Address</label
+            >
+            <span class="error-message">Please enter a valid email</span>
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              id="enquiryPhone"
+              name="phone"
+              placeholder=" "
+              required
+              pattern="[0-9]{10}"
+            />
+            <label for="enquiryPhone"
+              ><i class="fas fa-phone"></i> Phone Number</label
+            >
+            <span class="error-message"
+              >Please enter a valid 10-digit phone number</span
+            >
+          </div>
+          <div class="form-group">
+            <input type="text" id="enquiryProduct" name="product" readonly />
+            <label for="enquiryProduct"
+              ><i class="fas fa-box"></i> Product</label
+            >
+          </div>
+          <div class="form-group">
+            <textarea
+              id="enquiryMessage"
+              name="message"
+              placeholder=" "
+              required
+            ></textarea>
+            <label for="enquiryMessage"
+              ><i class="fas fa-comment"></i> Message</label
+            >
+            <span class="error-message">Please enter your message</span>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> Send Enquiry
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- WhatsApp Floating Icon -->
+    <a
+      href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20a%20query"
+      target="_blank"
+      class="whatsapp-float"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="/js/script.min.js"></script>
+  </body>
+</html>

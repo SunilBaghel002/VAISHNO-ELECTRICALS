@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - VAISHNO ELECTRICALS</title>
+    <link rel="shortcut icon" href="/images/logo.svg" type="image/x-icon">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/admin.css">
+  </head>
+  <body>
+    <!-- Header -->
+    <header id="header">
+      <nav>
+        <div class="logo">
+          <img src="/images/logo.svg" alt="" />
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/">Back to Home</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Admin Section -->
+    <section class="admin-section">
+      <div class="admin-container">
+        <h2 class="section-title">Manage Products</h2>
+        <div class="product-form fade-in">
+          <h3>Add/Edit Product</h3>
+          <form id="productForm">
+            <input type="hidden" id="productId" name="id" />
+            <input type="hidden" id="existingImage" name="existingImage" />
+            <div class="success-message" id="formSuccess">
+              Product saved successfully!
+            </div>
+            <div class="form-loading" id="formLoading"></div>
+            <div class="error-message" id="formError"></div>
+            <div class="form-group">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder=" "
+                required
+                aria-label="Product Name"
+              />
+              <label for="name"><i class="fas fa-box"></i> Product Name</label>
+            </div>
+            <div class="form-group">
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                aria-label="Product Image"
+              />
+              <label for="image"
+                ><i class="fas fa-image"></i> Product Image</label
+              >
+              <img
+                id="imagePreview"
+                class="image-preview"
+                alt="Image Preview"
+              />
+            </div>
+            <div class="price-group">
+              <div class="form-group">
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  placeholder=" "
+                  min="0"
+                  step="0.01"
+                  aria-label="Price"
+                />
+                <label for="price"
+                  ><i class="fas fa-rupee-sign"></i> Price (INR)</label
+                >
+              </div>
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  id="customPrice"
+                  name="customPrice"
+                  aria-label="Custom Price"
+                />
+                As per requirement
+              </label>
+            </div>
+            <div class="quantity-group">
+              <div class="form-group">
+                <input
+                  type="number"
+                  id="quantityValue"
+                  name="quantityValue"
+                  placeholder=" "
+                  min="0"
+                  step="0.01"
+                  required
+                  aria-label="Quantity Value"
+                />
+                <label for="quantityValue"
+                  ><i class="fas fa-balance-scale"></i> Quantity</label
+                >
+              </div>
+              <div class="form-group">
+                <select
+                  id="quantityUnit"
+                  name="quantityUnit"
+                  required
+                  aria-label="Quantity Unit"
+                >
+                  <option value="" disabled selected></option>
+                  <option value="kg">Per Kilogram (kg)</option>
+                  <option value="item">Per Item</option>
+                  <option value="meter">Per Meter (m)</option>
+                </select>
+                <label for="quantityUnit"
+                  ><i class="fas fa-ruler"></i> Unit</label
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                id="shortDescription"
+                name="shortDescription"
+                placeholder=" "
+                required
+                aria-label="Short Description"
+              />
+              <label for="shortDescription"
+                ><i class="fas fa-align-left"></i> Short Description</label
+              >
+            </div>
+            <div class="form-group">
+              <textarea
+                id="description"
+                name="description"
+                placeholder=" "
+                required
+                aria-label="Full Description"
+              ></textarea>
+              <label for="description"
+                ><i class="fas fa-file-alt"></i> Full Description</label
+              >
+            </div>
+            <div class="form-group">
+              <textarea
+                id="keyFeatures"
+                name="keyFeatures"
+                placeholder=" "
+                required
+                aria-label="Key Features"
+              ></textarea>
+              <label for="keyFeatures"
+                ><i class="fas fa-star"></i> Key Features
+                (comma-separated)</label
+              >
+            </div>
+            <div class="specifications-container">
+              <h4>Specifications</h4>
+              <div id="specFields"></div>
+              <button type="button" class="add-spec-btn" id="addSpecBtn">
+                <i class="fas fa-plus"></i> Add Specification
+              </button>
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-save"></i> Save Product
+            </button>
+          </form>
+        </div>
+        <div class="product-list fade-in">
+          <h3>Product List</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <img src="/images/logo.svg" alt="" />
+          <p>
+            Admin panel for managing electrical safety products. GSTIN:
+            06CROPS7313B1ZQ
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 VAISHNO ELECTRICALS. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="/js/admin.js"></script>
+  </body>
+</html>
