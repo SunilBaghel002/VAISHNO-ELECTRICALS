@@ -145,7 +145,7 @@ async function loadProduct() {
             : "item"
         }`
       : "/ unit";
-    document.getElementById("productImage").src =`              "/images/${product.name}.jpg"`;
+    document.getElementById("productImage").src =              "/images/product.name.jpg";
     document.getElementById("productImage").alt = product.name;
     document.getElementById("productDescription").textContent =
       product.description;
