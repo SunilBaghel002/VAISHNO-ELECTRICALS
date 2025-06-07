@@ -16,15 +16,13 @@ const port = process.env.PORT || 3000;
 
 // Ensure public and uploads directories exist
 const publicDir = path.join(__dirname, "public");
-const uploadsDir =
-  process.env.NODE_ENV === "production"
-    ? "/opt/render/project/src/public/Uploads"
-    : path.join(publicDir, "Uploads");
-
-// Ensure uploads directory exists
+const uploadsDir = path.join(publicDir, "Uploads");
+/*if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+}
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
-}
+}*/
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -91,7 +89,7 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     value: { type: Number, required: true, min: 0 },
-    unit: { type: String, required: true, enum: ["kg", "item", "meter","set"] },
+    unit: { type: String, required: true, enum: ["kg", "item", "meter", "set"] },
   },
   image: { type: String, required: true },
   description: { type: String, required: true },
@@ -451,8 +449,10 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
     if (quantity.value <= 0) {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
-    if (!["kg", "item", "meter"].includes(quantity.unit)) {
-      return res.status(400).json({ error: "Invalid quantity unit" });
+    if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
+      return res
+        .status(400)
+        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
@@ -531,8 +531,10 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (quantity.value <= 0) {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
-    if (!["kg", "item", "meter"].includes(quantity.unit)) {
-      return res.status(400).json({ error: "Invalid quantity unit" });
+    if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
+      return res
+        .status(400)
+        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
