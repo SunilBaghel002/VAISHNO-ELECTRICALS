@@ -65,6 +65,11 @@ nav {
   height: 40px;
   filter: invert(100%);
 }
+.logo-conatiner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .header-scrolled .logo img {
   filter: invert(0%);
@@ -796,5 +801,8 @@ footer {
   }
   .scroll-top {
     right: 80px;
+  }
+  footer{
+    width: 100%;
   }
 }

@@ -142,6 +142,8 @@ async function loadProduct() {
             ? "kg"
             : product.quantity.unit === "meter"
             ? "meter"
+            : product.quantity.unit === "set"
+            ? "set"
             : "item"
         }`
       : "/ unit";

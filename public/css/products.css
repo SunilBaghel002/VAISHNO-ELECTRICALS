@@ -68,6 +68,12 @@ nav {
   filter: invert(100%);
 }
 
+.logo-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .header-scrolled .logo img {
   filter: invert(0%);
 }
@@ -169,7 +175,7 @@ nav {
   justify-content: center;
   text-align: center;
   color: white;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 .hero::before {
   content: "";
