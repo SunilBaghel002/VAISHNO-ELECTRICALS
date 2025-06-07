@@ -24,7 +24,7 @@ const uploadsDir =
 // Ensure uploads directory exists
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
-}*/
+}
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
