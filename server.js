@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
@@ -15,13 +16,15 @@ const port = process.env.PORT || 3000;
 
 // Ensure public and uploads directories exist
 const publicDir = path.join(__dirname, "public");
-const uploadsDir = path.join(publicDir, "Uploads");
-if (!fs.existsSync(publicDir)) {
-  fs.mkdirSync(publicDir, { recursive: true });
-}
+const uploadsDir =
+  process.env.NODE_ENV === "production"
+    ? "/opt/render/project/src/public/Uploads"
+    : path.join(publicDir, "Uploads");
+
+// Ensure uploads directory exists
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
-}
+}*/
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -448,10 +451,8 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
     if (quantity.value <= 0) {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
-    if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
-      return res
-        .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
+    if (!["kg", "item", "meter"].includes(quantity.unit)) {
+      return res.status(400).json({ error: "Invalid quantity unit" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
@@ -530,10 +531,8 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (quantity.value <= 0) {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
-    if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
-      return res
-        .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
+    if (!["kg", "item", "meter"].includes(quantity.unit)) {
+      return res.status(400).json({ error: "Invalid quantity unit" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
