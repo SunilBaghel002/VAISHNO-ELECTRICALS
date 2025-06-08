@@ -43,12 +43,12 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 5%;
+  padding: 6px;
   max-width: 1400px;
   margin: 0 auto;
 }
 .logo {
-  font-size: 2rem;
+  /* font-size: 2rem; */
   font-weight: 800;
   background: linear-gradient(135deg, #1e40af, #3b82f6, #06b6d4);
   background-clip: text;
@@ -56,15 +56,15 @@ nav {
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  /* gap: 0.5rem; */
 }
 .logo i {
   color: #1e40af;
   -webkit-text-fill-color: #1e40af;
 }
 .logo img {
-  width: 80px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   filter: invert(100%);
 }
 
@@ -78,7 +78,7 @@ nav {
   filter: invert(0%);
 }
 .gst {
-  font-size: 0.9rem;
+  font-size: 10px;
   color: #cbd5e1;
   font-weight: 500;
 }
@@ -175,7 +175,7 @@ nav {
   justify-content: center;
   text-align: center;
   color: white;
-  margin-top: 60px;
+  margin-top: 50px !important;
 }
 .hero::before {
   content: "";
@@ -844,13 +844,13 @@ footer {
 }
 @media (max-width: 768px) {
   nav {
-    padding: 1rem 3%;
+    padding: 6px 12px;
   }
   .logo {
-    font-size: 1.8rem;
+    font-size: 20px;
   }
   .gst {
-    font-size: 0.8rem;
+    font-size: 10px;
   }
   .nav-links {
     position: fixed;
@@ -907,6 +907,9 @@ footer {
   .contact-form {
     padding: 1.5rem;
   }
+  body{
+    padding-bottom: 50px !important;
+  }
 }
 @media (max-width: 480px) {
   .hero {
@@ -929,5 +932,14 @@ footer {
   }
   .modal-content {
     padding: 1.5rem;
+  }
+}
+
+@media (max-width: 400px){
+  .contact-icon {
+    display: none !important;
+  }
+  .products-intro p{
+    font-size: 12px;
   }
 }
