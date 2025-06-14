@@ -11,6 +11,11 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-image: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80"); /* Replace with your image path */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* This keeps the image fixed */
+  background-position: center;
 }
 html {
   scroll-behavior: smooth;
@@ -366,7 +371,7 @@ nav {
 }
 .product-details {
   padding: 100px 5% 80px;
-  background: #f8fafc;
+  /* background: #f8fafc; */
   margin-top: 80px;
 }
 .product-details .container {

@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - VAISHNO ELECTRICALS</title>
+    <link rel="shortcut icon" href="/images/logo.svg" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #f9fafb;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      a {
+        text-decoration: none;
+      }
+      /* Loading Animation */
+      .page-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+      .page-loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #3b82f6;
+        border-top: 6px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      /* Header */
+      header {
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e293b 50%,
+          #334155 100%
+        );
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .header-scrolled {
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+      .header-scrolled .nav-links a,
+      .header-scrolled .gstin {
+        color: #333;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .logo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .logo img {
+        width: 50px;
+        height: 50px;
+        filter: invert(100%);
+      }
+      .header-scrolled .logo img {
+        filter: invert(0%);
+      }
+      .logo span {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .gstin {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        font-weight: 400;
+        margin-top: 0.25rem;
+      }
+      .header-scrolled .gstin {
+        color: #666;
+      }
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+      .nav-links a {
+        color: #cbd5e1;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+      }
+      .nav-links a.active,
+      .nav-links a:hover {
+        color: #3b82f6;
+      }
+      .nav-item {
+        position: relative;
+      }
+      .dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        min-width: 200px;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+      }
+      .nav-item:hover .dropdown {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .dropdown li {
+        list-style: none;
+      }
+      .dropdown a {
+        display: block;
+        padding: 0.8rem 1.2rem;
+        color: #333;
+        font-weight: 400;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+      .dropdown a:hover {
+        background: #f1f5f9;
+        color: #1e40af;
+      }
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #3b82f6;
+        cursor: pointer;
+      }
+      /* Admin Prompt */
+      .admin-prompt {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .admin-prompt.active {
+        display: flex;
+      }
+      .prompt-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+      }
+      .prompt-box h3 {
+        font-size: 1.5rem;
+        color: #1e40af;
+        margin-bottom: 1rem;
+      }
+      .prompt-box input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+      .prompt-box button {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .prompt-box button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(59, 130, 246, 0.3);
+      }
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+      }
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+        animation: modalFadeIn 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .modal-content::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+      }
+      .modal-content h3 {
+        font-size: 1.5rem;
+        color: #1e40af;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
+        color: #666;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+      .close:hover {
+        color: #ef4444;
+      }
+      /* Form Styles */
+      .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: "Poppins", sans-serif;
+        background: #f8fafc;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      .form-group label {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-size: 0.95rem;
+        color: #666;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .form-group input:not(:placeholder-shown) + label,
+      .form-group textarea:not(:placeholder-shown) + label,
+      .form-group select:not(:placeholder-shown) + label,
+      .form-group input:focus + label,
+      .form-group textarea:focus + label,
+      .form-group select:focus + label {
+        top: -10px;
+        left: 8px;
+        font-size: 0.75rem;
+        color: #3b82f6;
+        background: white;
+        padding: 0 6px;
+      }
+      .form-group textarea {
+        height: 120px;
+        resize: vertical;
+      }
+      .form-group select:invalid {
+        color: #999;
+      }
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .submit-btn,
+      .enquiry-btn,
+      .whatsapp-btn {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .whatsapp-btn {
+        background: #25d366;
+      }
+      .submit-btn:hover,
+      .enquiry-btn:hover,
+      .whatsapp-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(59, 130, 246, 0.3);
+      }
+      .whatsapp-btn:hover {
+        box-shadow: 0 12px 30px rgba(37, 211, 102, 0.3);
+      }
+      .error-message {
+        color: #ef4444;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+      .form-loading {
+        display: none;
+        text-align: center;
+        margin: 1rem 0;
+      }
+      .form-loading.active {
+        display: block;
+      }
+      .form-loading::after {
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border: 3px solid #3b82f6;
+        border-top: 3px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      .success-message {
+        display: none;
+        background: #d1fae5;
+        color: #065f46;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 500;
+      }
+      .success-message.active {
+        display: block;
+      }
+      /* Product Details */
+      .product-details {
+        padding: 120px 5% 80px;
+        background: #ffffff;
+        margin-top: 80px;
+      }
+      .product-details .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
+      .product-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+      .product-image-large {
+        width: 100%;
+        height: auto;
+        transition: transform 0.4s ease;
+        display: block;
+      }
+      .product-image-container:hover .product-image-large {
+        transform: scale(1.1);
+      }
+      .product-info {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 100px;
+      }
+      .product-info h2 {
+        font-size: 2.5rem;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+      .product-price {
+        font-size: 1.8rem;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+      }
+      .product-price span {
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .product-price .unit {
+        font-size: 1.2rem;
+        color: #666;
+        font-weight: 400;
+      }
+      .product-info p {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+      .product-info h3 {
+        font-size: 1.5rem;
+        color: #1e40af;
+        margin-bottom: 1rem;
+      }
+      .features-list,
+      .specs-list {
+        list-style: none;
+        margin-bottom: 1.5rem;
+      }
+      .features-list li,
+      .specs-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+      }
+      .features-list i,
+      .specs-list i {
+        color: #3b82f6;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      /* Product Benefits */
+      .product-benefits {
+        padding: 80px 5%;
+        background: #f8fafc;
+        text-align: center;
+      }
+      .product-benefits .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .benefit-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .benefit-card:hover {
+        transform: translateY(-5px);
+      }
+      .benefit-card i {
+        font-size: 2rem;
+        color: #3b82f6;
+        margin-bottom: 0.5rem;
+      }
+      .benefit-card h4 {
+        font-size: 1.2rem;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+      .benefit-card p {
+        font-size: 0.9rem;
+        color: #666;
+      }
+      /* Technical Details */
+      .technical-details {
+        padding: 80px 5%;
+        background: #ffffff;
+        text-align: center;
+      }
+      .technical-details .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #f8fafc;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+      .technical-details p {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 2rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* Related Products */
+      .related-products {
+        padding: 80px 5%;
+        background: #f8fafc;
+      }
+      .related-products .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .product-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .product-card h3 {
+        font-size: 1.2rem;
+        color: #1e40af;
+        padding: 1rem;
+        margin: 0;
+      }
+      .product-card p {
+        font-size: 0.9rem;
+        color: #666;
+        padding: 0 1rem 1rem;
+      }
+      .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .product-card:hover .product-overlay {
+        opacity: 1;
+      }
+      .product-btn {
+        padding: 0.5rem 1.5rem;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .product-btn:hover {
+        background: #1e40af;
+      }
+      .products-loading {
+        text-align: center;
+        padding: 2rem;
+      }
+      .products-loading::after {
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border: 3px solid #3b82f6;
+        border-top: 3px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      /* Contact Section */
+      .contact {
+        padding: 80px 5%;
+        background: #ffffff;
+      }
+      .contact .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .section-title {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: #1e40af;
+      }
+      .section-subtitle {
+        text-align: center;
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+      .contact-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .contact-icon {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: white;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.2rem;
+      }
+      .contact-details h4 {
+        font-size: 1.1rem;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+      .contact-details p {
+        font-size: 0.95rem;
+        color: #666;
+      }
+      .contact-details a {
+        color: #3b82f6;
+        font-size: 0.95rem;
+      }
+      .contact-details a:hover {
+        text-decoration: underline;
+      }
+      .contact-details small {
+        font-size: 0.85rem;
+        color: #888;
+      }
+      .contact-form {
+        background: #f8fafc;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      }
+      /* Footer */
+      footer {
+        background: linear-gradient(45deg, #0f172a, #1e293b);
+        color: white;
+        padding: 3rem 5% 1rem;
+        margin-top: auto;
+      }
+      .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+      }
+      .footer-section h3 {
+        font-size: 1.2rem;
+        color: #3b82f6;
+        margin-bottom: 1rem;
+      }
+      .footer-section img {
+        height: 60px;
+        filter: invert(100%);
+      }
+      .footer-section p,
+      .footer-section ul li a {
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+      .footer-section ul {
+        list-style: none;
+      }
+      .footer-section ul li {
+        margin-bottom: 0.8rem;
+      }
+      .footer-section ul li a:hover {
+        color: #3b82f6;
+      }
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .social-links a {
+        color: #94a3b8;
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+      }
+      .social-links a:hover {
+        color: #3b82f6;
+      }
+      .footer-nav {
+        margin-top: 2rem;
+        text-align: center;
+      }
+      .footer-nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        list-style: none;
+      }
+      .footer-nav a {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s ease;
+      }
+      .footer-nav a:hover {
+        color: #3b82f6;
+      }
+      .footer-nav a.active {
+        color: #3b82f6;
+      }
+      .footer-bottom {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #334155;
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+      /* Floating Actions */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #25d366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+      }
+      .scroll-top {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(45deg, #3b82f6, #1e40af);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        z-index: 999;
+      }
+      .scroll-top.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+      .scroll-top:hover {
+        transform: translateY(-4px);
+      }
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          position: fixed;
+          top: 80px;
+          left: 0;
+          width: 100%;
+          background: white;
+          flex-direction: column;
+          padding: 2rem;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+          transform: translateY(-100%);
+          transition: all 0.3s ease;
+        }
+        .nav-links.active {
+          transform: translateY(0);
+          display: flex;
+        }
+        .nav-item:hover .dropdown {
+          display: none;
+        }
+        .nav-item.active .dropdown {
+          display: block;
+          position: static;
+          box-shadow: none;
+          background: transparent;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+        .product-details .container {
+          grid-template-columns: 1fr;
+        }
+        .product-info {
+          position: static;
+        }
+        .contact-container {
+          grid-template-columns: 1fr;
+        }
+        .action-buttons {
+          flex-direction: column;
+        }
+        .submit-btn,
+        .enquiry-btn,
+        .whatsapp-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .footer-nav {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background: rgba(15, 25, 42, 0.95);
+          padding: 0.5rem;
+          box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .footer-nav ul {
+          flex-direction: row;
+          justify-content: space-around;
+        }
+        .footer-nav a {
+          flex-direction: column;
+          font-size: 0.8rem;
+          padding: 0.5rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .section-title {
+          font-size: 2rem;
+        }
+        .product-info h2 {
+          font-size: 2rem;
+        }
+        .product-price {
+          font-size: 1.5rem;
+        }
+        .whatsapp-float {
+          bottom: 70px;
+          width: 50px;
+          height: 50px;
+          font-size: 1.8rem;
+        }
+        .scroll-top {
+          bottom: 20px;
+          width: 45px;
+          height: 45px;
+          font-size: 1rem;
+        }
+        .benefits-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Page Loading -->
+    <div class="page-loading" id="pageLoading">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Admin Prompt -->
+    <div class="admin-prompt" id="adminPrompt">
+      <div class="prompt-box">
+        <h3>Admin Access</h3>
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Password"
+          aria-label="Admin password"
+        />
+        <button onclick="validateAdmin()">Login</button>
+      </div>
+    </div>
+
+    <!-- Enquiry Modal -->
+    <div class="modal" id="enquiryModal" role="dialog" aria-labelledby="enquiryModalTitle">
+      <div class="modal-content">
+        <span class="close" role="button" aria-label="Close enquiry modal">×</span>
+        <h2 id="enquiryModalTitle">Enquiry Form</h2>
+        <form id="enquiryForm">
+          <div class="success-message" id="enquirySuccess">
+            Enquiry sent successfully!
+          </div>
+          <div class="form-loading" id="enquiryLoading"></div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="enquiryName"
+              name="name"
+              placeholder=" "
+              required
+              aria-label="Full Name"
+            />
+            <label for="enquiryName"><i class="fas fa-user"></i> Name</label>
+            <div class="error-message">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="enquiryEmail"
+              name="email"
+              placeholder=" "
+              required
+              aria-label="Email Address"
+            />
+            <label for="enquiryEmail"><i class="fas fa-envelope"></i> Email</label>
+            <div class="error-message">Please enter a valid email.</div>
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              id="enquiryPhone"
+              name="phone"
+              placeholder=" "
+              required
+              pattern="[0-9]{10}"
+              aria-label="Phone Number"
+            />
+            <label for="enquiryPhone"><i class="fas fa-phone"></i> Phone</label>
+            <div class="error-message">Enter a valid 10-digit phone number.</div>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="enquiryProduct"
+              name="product"
+              placeholder=" "
+              readonly
+              aria-label="Product Name"
+            />
+            <label for="enquiryProduct"><i class="fas fa-box"></i> Product</label>
+          </div>
+          <div class="form-group">
+            <textarea
+              id="enquiryMessage"
+              name="message"
+              placeholder=" "
+              required
+              aria-label="Message"
+            ></textarea>
+            <label for="enquiryMessage"><i class="fas fa-comment"></i> Message</label>
+            <div class="error-message">Please enter your message.</div>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> Send Enquiry
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+      <nav>
+        <div class="logo">
+          <div class="logo-container">
+            <img src="/images/logo.svg" alt="Vaishno Electricals Logo" />
+            <span>- Vaishno Electricals</span>
+          </div>
+          <p class="gstin">GSTIN: 06CROPS7313B1ZV</p>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/">Home</a></li>
+          <a href="/#about">About</a></li>
+          <li class="nav-item">
+            <a href="/products" class="active">Products <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown" id="productsDropdown" aria-label="Products menu"></ul>
+          </li>
+          <li><a href="/#why-choose">Why Choose Us</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Product Details -->
+    <section class="product-details fade-in" id="productDetails">
+      <div class="container" id="productContainer"></div>
+    </section>
+
+    <!-- Product Benefits -->
+    <section class="product-benefits fade-in">
+      <div class="container">
+        <h2 class="section-title">Why Choose This Product?</h2>
+        <p class="section-subtitle">
+          Discover the exceptional advantages of our advanced electrical solutions.
+        </p>
+        <div class="benefits-grid" id="benefitsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="technical-details fade-in">
+      <div class="container">
+        <h2 class="section-title">Technical Specifications</h2>
+        <p id="technicalDescription"></p>
+        <button class="enquiry-btn" id="enquiryBtnTech">
+          <i class="fas fa-question-circle"></i> Enquire Now
+        </button>
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-products fade-in">
+      <div class="container">
+        <h2 class="section-title">Explore More Products</h2>
+        <p class="section-subtitle">
+          Browse our range of high-quality electrical safety solutions.
+        </p>
+        <div class="products-grid" id="productsGrid">
+          <div class="products-loading"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact fade-in">
+      <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+          Have questions or need a quote? Contact our experts today.
+        </p>
+        <div class="contact-container">
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Phone</h3>
+                <p>+91-9873906044, +91-9810110903</p>
+                <small>24/7 emergency support</small>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Email</h3>
+                <p>vaishnoelectricals2@gmail.com</p>
+                <small>Reply within 24 hours</small>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Address</h3>
+                <p>
+                  Near Shiv Mandir, Ground Floor, 1-C-9A, B.P.,
+                  Bata Hardware Road, Faridabad, Haryana, 121001
+                </p>
+                <a href="https://www.google.com/maps/place/28.395989975789417,77.31461497548826" target="_blank">
+                  View on Map
+                </a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-details">
+                <h3>Hours</h3>
+                <p>Mon-Sat: 9:00 AM - 6:00 PM<br>Sun: Closed</p>
+                <small>24/7 emergency support</small>
+              </div>
+            </div>
+          </div>
+          <div class="contact-form">
+            <h3>Send a Message</h3>
+            <form id="contactForm">
+              <div class="form-loading" id="contactLoading"></div>
+              <div class="success-message" id="contactSuccess">
+                Message sent successfully!
+              </div>
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder=" "
+                  required
+                  aria-label="Full Name"
+                />
+                <label for="name"><i class="fas fa-user"></i> Name</label>
+                <span class="error-message">Please enter your name.</span>
+              </div>
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder=" "
+                  required
+                  aria-label="Email Address"
+                />
+                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <span class="error-message">Please enter a valid email.</span>
+              </div>
+              <div class="form-group">
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder=" "
+                  required
+                  pattern="[0-9]{10}"
+                  aria-label="Phone Number"
+                />
+                <label for="phone"><i class="fas fa-phone"></i> Phone</label>
+                <span class="error-message">Enter a valid 10-digit phone number.</span>
+              </div>
+              <div class="form-group">
+                <select id="inquiry" name="inquiry" required aria-label="Inquiry Type">
+                  <option value="" disabled selected></option>
+                  <option value="product">Product Inquiry</option>
+                  <option value="installation">Installation Services</option>
+                  <option value="consultation">Technical Consultation</option>
+                  <option value="other">Other</option>
+                </select>
+                <label for="inquiry"><i class="fas fa-tag"></i> Inquiry Type</label>
+                <span class="error-message">Please select an inquiry type.</span>
+              </div>
+              <div class="form-group">
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder=" "
+                  required
+                  aria-label="Message"
+                ></textarea>
+                <label for="message"><i class="fas fa-comment"></i> Message</label>
+                <span class="error-message">Please enter your message.</span>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                  <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+                <a
+                  href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry."
+                  target="_blank"
+                  class="whatsapp-btn"
+                >
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <img src="/images/logo.svg" alt="Vaishno Electricals Logo" />
+          <p>
+            Leading provider of earthing and lightning protection solutions since 2010.
+            <br><strong>GSTIN: 06CROPS7313B1ZQ</strong>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/#why-choose">Why Choose Us</a></li>
+            <li><a href="/#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Products</h3>
+          <ul id="footerProducts"></ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>
+            <i class="fas fa-map-marker-alt"></i>
+            Near Shiv Mandir, Ground Floor, 1-C-9A, B.P.,
+            Bata Hardware Road, Faridabad, Haryana, 121001
+          </p>
+          <p><i class="fas fa-phone"></i> +91-9873906044, +91-9810110903</p>
+          <p><i class="fas fa-envelope"></i> vaishnoelectricals2@gmail.com</p>
+          <p><i class="fas fa-clock"></i> Mon-Sat: 9AM-6PM</p>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <ul>
+          <li><a href="/" class="active"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="/#about"><i class="fas fa-info-circle"></i> About</a></li>
+          <li><a href="/products"><i class="fas fa-box"></i> Products</a></a></li>
+          <li><a href="/#contact"><i class="fas fa-question-circle"></i> Query</a></li>
+          <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          © 2025 VAISHNO ELECTRICALS. All Rights Reserved. | Designed for Safety
+        </p>
+      </div>
+    </footer>
+
+    <!-- Floating Actions -->
+    <a
+      href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry."
+      target="_blank"
+      class="whatsapp-float"
+      id="whatsappFloat"
+      aria-label="Chat on WhatsApp"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button type="button" class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+      // Mock Data
+      const mockProduct = {
+        id: "1",
+        name: "Chemical Earthing",
+        price: "As per request",
+        quantity: { value: "1", unit: "set" },
+        description: "High-quality chemical earthing solution for safety.",
+        keyFeatures: ["Durable", "Low Maintenance", "Corrosion Resistant"],
+        specifications: [
+          { key: "Material", value: "Copper" },
+          { key: "Length", value: "3m" },
+        ],
+        category: { name: "Earthing" },
+        image: "/images/placeholder.jpg",
+      };
+      const mockProducts = [
+        {
+          id: "1",
+          name: "Chemical Earthing",
+          shortDescription: "High-quality earthing solution.",
+          category: "Earthing",
+          image: "/images/placeholder.jpg",
+        },
+        {
+          id: "2",
+          name: "Lightning Arrestor",
+          shortDescription: "Advanced lightning protection.",
+          category: "Lightning Protection",
+          image: "/images/placeholder.jpg",
+        },
+        {
+          id: "3",
+          name: "Copper Electrode",
+          shortDescription: "Durable copper electrode.",
+          category: "Earthing",
+          image: "/images/placeholder.jpg",
+        },
+      ];
+
+      // Utilities
+      function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+
+      function createFocusTrap(elementId, focusableElements) {
+        const modal = document.getElementById(elementId);
+        const focusable = modal.querySelectorAll(focusableElements);
+        const firstFocusable = focusable[0];
+        const lastFocusable = focusable[focusable.length - 1];
+
+        modal.addEventListener("keydown", (e) => {
+          if (e.key === "Tab") {
+            if (e.shiftKey && document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        });
+
+        return firstFocusable;
+      };
+
+      // Admin Prompt
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === "U") {
+          e.preventDefault();
+          const adminPrompt = document.getElementById("adminPrompt");
+          adminPrompt.style.display = "flex";
+          document.getElementById("adminPassword").focus();
+        }
+      });
+
+      async function validateAdmin() {
+        const password = document.getElementById("adminPassword").value.trim();
+        const adminPrompt = document.getElementById("adminPrompt");
+        if (!password) {
+          alert("Please enter a password.");
+          return;
+        }
+        try {
+          const response = await fetch("/api/admin/authenticate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password }),
+          });
+          if (!response.ok) throw new Error("Invalid password");
+          const data = await response.json();
+          localStorage.setItem("adminAuth", "true");
+          localStorage.setItem("adminToken", 
+data.token);
+          adminPrompt.style.display = "none";
+          window.location.href = "/admin";
+        } catch (err) {
+          console.error("Admin auth failed:", err);
+          alert("Invalid password.");
+          document.getElementById("adminPassword").value = "";
+        }
+      }
+
+      // Mobile Menu
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const navLinks = document.getElementById("navLinks");
+      const navItems = document.querySelectorAll(".nav-item");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        const icon = mobileMenuBtn.querySelector("i");
+        icon.classList.toggle("fa-bars");
+        icon.classList.toggle("fa-times");
+        navItems.forEach(item => item.classList.remove("active"));
+      });
+
+      navLinks.addEventListener("click", (e) => {
+        const navItem = e.target.closest(".nav-item");
+        if (navItem && window.innerWidth <= window.innerWidth <= 768) {
+          e.preventDefault();
+          const isActive = navItem.classList.contains("active");
+          navItems.forEach(item => item.classList.remove("active"));
+          if(!isActive) {
+            navItem.classList.add("active");
+          }
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          e.target.closest(".nav-item") ||
+          !e.target.closest(".mobile-menu-btn") &&
+          window.innerWidth <= window.innerWidth <= 768
+        ) {
+          navItems.forEach(item => item.classList.remove("active"));
+          navLinks.classList.remove("active");
+          const icon = mobileMenuBtn.querySelector("i");
+          icon.classList.add("fa-bars");
+          icon.classList.remove("fa-times");
+        }
+      });
+
+      // Header Scroll
+      const header = document.getElementById("header");
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("header-scrolled", window.scrollY > 100);
+      });
+
+      // Smooth Scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = anchor.getAttribute("href");
+          const target = document.querySelector(targetId);
+          if (target) {
+            const headerHeight = header.offsetHeight;
+            window.scrollTo({
+              top: target.offsetTop - headerHeight,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Scroll Animations
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.animation = "fadeInUp 0.8s ease forwards";
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      );
+
+      function initFadeIn() {
+        document.querySelectorAll(".fade-in").forEach(el => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(20px)";
+          observer.observe(el);
+        });
+      }
+
+      // Scroll to Top
+      const scrollTop = document.getElementById("scrollTop");
+      window.addEventListener("scroll", () => {
+        scrollTop.classList.toggle("visible", window.scrollY > 300);
+      });
+      scrollTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // Load Product
+      async function loadProduct() {
+        const pageLoading = document.getElementById("pageLoading");
+        const productContainer = document.getElementById("productContainer");
+        const technicalDescription = document.getElementById("technicalDescription");
+        const benefitsGrid = document.getElementById("benefitsGrid");
+        const whatsappFloat = document.getElementById("whatsappFloat");
+        const enquiryProduct = document.getElementById("enquiryProduct");
+
+        const pathSegments = window.location.pathname.split("/");
+        const productId = pathSegments[pathSegments.length - 1].replace(/\.html$/, "");
+        if (!productId || productId === "products") {
+          productContainer.innerHTML = "<p>Invalid product ID.</p>";
+          pageLoading.classList.add("hidden");
+          return;
+        }
+
+        const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+          const response = await Promise.race([
+            fetch(`/api/products/${productId}`),
+            minDelay.then(() => Promise.reject(new Error("Timeout")))
+          ]);
+          await minDelay;
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Product not found");
+          }
+          const product = await response.json();
+          const imageUrl = product.image || `/images/${product.name.replace(/\s+/g, "-").toLowerCase()}.jpg`;
+          productContainer.innerHTML = `
+            <div class="product-image-container">
+              <img id="productImage" class="product-image-large" src="${imageUrl}" alt="${product.name}" onerror="this.src='/images/placeholder.jpg'" loading="lazy">
+            </div>
+            <div class="product-info">
+              <h2 id="productName">${product.name}</h2>
+              <div class="product-price">
+                Price: <span id="productPrice">${
+                  typeof product.price === "string"
+                    ? product.price
+                    : `₹${(product.price || 0).toFixed(2)}`
+                }</span>
+                <span id="productQuantity" class="unit">${
+                  product.quantity
+                    ? `/ ${product.quantity.value} ${
+                        product.quantity.unit === "kg"
+                          ? "kg"
+                          : product.quantity.unit === "meter"
+                          ? "meter"
+                          : product.quantity.unit === "set"
+                          ? "set"
+                          : "item"
+                      }`
+                    : "/ unit"
+                }</span>
+              </div>
+              <p id="productDescription">${product.description || "No description available."}</p>
+              <h3>Key Features</h3>
+              <ul class="features-list" id="productFeatures">
+                ${product.keyFeatures?.map(feature => `<li><i class="fas fa-check-circle"></i> ${feature}</li>`).join("") || "<li>No features listed.</li>"}
+              </ul>
+              <h3>Specifications</h3>
+              <ul class="specs-list" id="productSpecs">
+                ${product.specifications?.map(spec => `<li><i class="fas fa-cog"></i> <strong>${spec.key}:</strong> ${spec.value}</li>`).join("") || "<li>No specifications listed.</li>"}
+              </ul>
+              <div class="action-buttons">
+                <button class="enquiry-btn" id="enquiryBtn">
+                  <i class="fas fa-question-circle"></i> Enquiry
+                </button>
+                <a href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(product.name)}" target="_blank" class="whatsapp-btn" id="whatsappLink">
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+              </div>
+            </div>
+          `;
+          const materialSpec = product.specifications?.find(spec => 
+            spec.key.toLowerCase().includes("material") || spec.key.toLowerCase().includes("coating")
+          );
+          technicalDescription.textContent = materialSpec
+            ? `Crafted with ${materialSpec.value.toLowerCase()} for superior durability and safety, this product meets stringent industry standards for reliable performance in diverse environments.`
+            : "Our products use premium materials to ensure longevity and safety, tailored to meet industry requirements.";
+          const benefits = generateBenefits(product);
+          benefitsGrid.innerHTML = benefits.map(benefit => `
+            <div class="benefit-card fade-in">
+              <i class="${benefit.icon}"></i>
+              <h4>${benefit.title}</h4>
+              <p>${benefit.description}</p>
+            </div>
+          `).join("");
+          whatsappFloat.href = `https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(product.name)}`;
+          enquiryProduct.value = product.name;
+          document.getElementById("enquiryBtn").addEventListener("click", openModal);
+          document.getElementById("enquiryBtnTech").addEventListener("click", openModal);
+          initFadeIn();
+        } catch (err) {
+          console.error("Product load error:", err);
+          productContainer.innerHTML = `<p>${err.message || "Failed to load product."}</p>`;
+          technicalDescription.textContent = "Product details unavailable.";
+          benefitsGrid.innerHTML = "<p>No benefits available.</p>";
+        } finally {
+          pageLoading.classList.add("hidden");
+          setTimeout(() => pageLoading.style.display = "none", 500);
+        }
+      }
+
+      // Generate Benefits
+      function generateBenefits(product) {
+        const category = product.category?.name?.toLowerCase() || "";
+        const defaultBenefits = [
+          {
+            icon: "fas fa-shield-alt",
+            title: "Enhanced Safety",
+            description: "Designed to protect against electrical hazards.",
+          },
+          {
+            icon: "fas fa-tools",
+            title: "Easy Installation",
+            description: "Simplified setup for quick deployment.",
+          },
+          {
+            icon: "fas fa-leaf",
+            title: "Eco-Friendly",
+            description: "Sustainable materials for a greener future.",
+          },
+        ];
+        if (category.includes("earthing")) {
+          return [
+            {
+              icon: "fas fa-bolt",
+              title: "Superior Grounding",
+              description: "Ensures reliable earthing for safety.",
+            },
+            ...defaultBenefits.slice(1),
+          ];
+        } else if (category.includes("lightning")) {
+          return [
+            {
+              icon: "fas fa-cloud-bolt",
+              title: "Lightning Protection",
+              description: "Shields structures from lightning strikes.",
+            },
+            ...defaultBenefits.slice(1),
+          ];
+        }
+        return defaultBenefits;
+      }
+
+      // Load Related Products
+      async function loadRelatedProducts() {
+        const productsGrid = document.getElementById("productsGrid");
+        try {
+          const response = await fetch("/api/products");
+          if (!response.ok) throw new Error("Failed to fetch products");
+          const products = await response.json();
+          renderProducts(products);
+        } catch (err) {
+          console.error("Related products error:", err);
+          renderProducts(mockProducts);
+        }
+      }
+
+      function renderProducts(products) {
+        const productsGrid = document.getElementById("productsGrid");
+        productsGrid.innerHTML = "";
+        if (!products?.length) {
+          productsGrid.innerHTML = "<p>No products available.</p>";
+          return;
+        }
+        products.forEach(product => {
+          const card = `
+            <div class="product-card fade-in">
+              <img src="${product.image || "/images/placeholder.jpg"}" alt="${product.name}" class="product-image" onerror="this.src='/images/placeholder.jpg'" loading="lazy">
+              <h3>${product.name}</h3>
+              <p>${product.shortDescription || "No description available."}</p>
+              <div class="product-overlay">
+                <a href="/products/${product.id}" class="product-btn">
+                  <i class="fas fa-eye"></i> View
+                </a>
+                <button class="product-btn enquiry-btn" data-product="${product.name}">
+                  <i class="fas fa-question-circle"></i> Enquiry
+                </button>
+              </div>
+            </div>
+          `;
+          productsGrid.insertAdjacentHTML("beforeend", card);
+        });
+        document.querySelectorAll(".enquiry-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document.getElementById("enquiryProduct").value = btn.getAttribute("data-product");
+            openModal();
+          });
+        });
+        initFadeIn();
+      }
+
+      // Load Dropdown and Footer
+      async function loadDropdownAndFooter() {
+        const dropdown = document.getElementById("productsDropdown");
+        const footerProducts = document.getElementById("footerProducts");
+        try {
+          const response = await fetch("/api/products");
+          if (!response.ok) throw new Error("Failed to fetch products");
+          const products = await response.json();
+          dropdown.innerHTML = "";
+          footerProducts.innerHTML = "";
+          if (!products?.length) {
+            dropdown.innerHTML = '<li><a href="#">No products available</a></li>';
+            return;
+          }
+          products.forEach((product, index) => {
+            const item = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
+            dropdown.insertAdjacentHTML("beforeend", item);
+            if (index < 5) footerProducts.insertAdjacentHTML("beforeend", item);
+          });
+        } catch (err) {
+          console.error("Dropdown/footer error:", err);
+        }
+      }
+
+      // Enquiry Modal
+      const enquiryModal = document.getElementById("enquiryModal");
+      const closeModalBtn = enquiryModal.querySelector(".close");
+
+      function openModal() {
+        enquiryModal.style.display = "flex";
+        const firstFocusable = createFocusTrap("enquiryModal", 'input, textarea, button, .close');
+        firstFocusable.focus();
+      }
+
+      function closeModal() {
+        enquiryModal.style.display = "none";
+        document.getElementById("enquiryForm").reset();
+        document.getElementById("enquirySuccess").classList.remove("active");
+        document.getElementById("enquiryLoading").classList.remove("active");
+        document.querySelectorAll("#enquiryForm .error-message").forEach(el => {
+          el.style.display = "none";
+        });
+      }
+
+      closeModalBtn.addEventListener("click", closeModal);
+      window.addEventListener("click", e => {
+        if (e.target === enquiryModal) closeModal();
+      });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && enquiryModal.style.display === "flex") closeModal();
+      });
+
+      // Enquiry Form
+      document.getElementById("enquiryForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const loading = document.getElementById("enquiryLoading");
+        const success = document.getElementById("enquirySuccess");
+        const errorMessages = document.querySelectorAll("#enquiryForm .error-message");
+        errorMessages.forEach(el => el.style.display = "none");
+        let hasError = false;
+
+        const name = document.getElementById("enquiryName").value.trim();
+        const email = document.getElementById("enquiryEmail").value.trim();
+        const phone = document.getElementById("enquiryPhone").value.trim();
+        const product = document.getElementById("enquiryProduct").value.trim();
+        const message = document.getElementById("enquiryMessage").value.trim();
+
+        if (!name) {
+          errorMessages[0].style.display = "block";
+          hasError = true;
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          errorMessages[1].style.display = "block";
+          hasError = true;
+        }
+        if (!phone || !/^[0-9]{10}$/.test(phone)) {
+          errorMessages[2].style.display = "block";
+          hasError = true;
+        }
+        if (!message) {
+          errorMessages[4].style.display = "block";
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        loading.classList.add("active");
+        try {
+          const response = await fetch("/api/enquiry", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, phone, product, message }),
+          });
+          if (!response.ok) throw new Error("Enquiry failed");
+          success.classList.add("active");
+          setTimeout(closeModal, 2000);
+        } catch (err) {
+          console.error("Enquiry error:", err);
+          errorMessages[0].textContent = "An error occurred. Please try again.";
+          errorMessages[0].style.display = "block";
+        } finally {
+          loading.classList.remove("active");
+        }
+      });
+
+      // Contact Form
+      document.getElementById("contactForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const loading = document.getElementById("contactLoading");
+        const success = document.getElementById("contactSuccess");
+        const errorMessages = document.querySelectorAll("#contactForm .error-message");
+        errorMessages.forEach(el => el.style.display = "none");
+        let hasError = false;
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const inquiry = document.getElementById("inquiry").value;
+        const message = document.getElementById("message").value.trim();
+
+        if (!name) {
+          errorMessages[0].style.display = "block";
+          hasError = true;
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          errorMessages[1].style.display = "block";
+          hasError = true;
+        }
+        if (!phone || !/^[0-9]{10}$/.test(phone)) {
+          errorMessages[2].style.display = "block";
+          hasError = true;
+        }
+        if (!inquiry) {
+          errorMessages[3].style.display = "block";
+          hasError = true;
+        }
+        if (!message) {
+          errorMessages[4].style.display = "block";
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        loading.classList.add("active");
+        try {
+          const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, phone, inquiry, message }),
+          });
+          if (!response.ok) throw new Error("Contact failed");
+          success.classList.add("active");
+          document.getElementById("contactForm").reset();
+          setTimeout(() => success.classList.remove("active"), 3000);
+        } catch (err) {
+          console.error("Contact error:", err);
+          errorMessages[0].textContent = "An error occurred. Please try again.";
+          errorMessages[0].style.display = "block";
+        } finally {
+          loading.classList.remove("active");
+        }
+      });
+
+      // Initialize
+      window.addEventListener("load", () => {
+        document.body.style.opacity = "1";
+        loadProduct();
+        loadRelatedProducts();
+        loadDropdownAndFooter();
+        initFadeIn();
+      });
+
+      document.body.style.opacity = "0";
+      document.body.style.transition = "opacity 0.5s ease";
+    </script>
+  </body>
+</html>

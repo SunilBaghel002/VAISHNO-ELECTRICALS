@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
@@ -17,12 +16,12 @@ const port = process.env.PORT || 3000;
 // Ensure public and uploads directories exist
 const publicDir = path.join(__dirname, "public");
 const uploadsDir = path.join(publicDir, "Uploads");
-/*if (!fs.existsSync(publicDir)) {
+if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
-}*/
+}
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -66,10 +65,7 @@ app.use(express.static(publicDir));
 
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
@@ -101,6 +97,11 @@ const productSchema = new mongoose.Schema({
       value: { type: String, required: true },
     },
   ],
+  category: {
+    type: String,
+    required: true,
+    enum: ["Earthing", "Lightning Protection", "Construction Use", "Other"],
+  },
   createdAt: { type: Date, default: Date.now },
 });
 const Product = mongoose.model("Product", productSchema);
@@ -122,7 +123,7 @@ const authenticateAdmin = async (req, res, next) => {
   try {
     next();
   } catch (error) {
-    console.error("Authentication error:", error);
+    console.error("Authentication error:", error.message);
     res.status(500).json({ error: "Server error during authentication" });
   }
 };
@@ -137,8 +138,8 @@ const validateEmail = (email) => {
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",
-  port: 465,
-  secure: false, // Use TLS
+  port: 587,
+  secure: false, // Use STARTTLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -278,14 +279,13 @@ const generateEmailTemplate = (type, data) => {
             <td style="background-color: #f8fafc; padding: 20px; text-align: center; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
               <p style="margin: 0; font-size: 14px; color: #666;">
                 Vaishno Electricals<br>
-                NEAR SHIV MANDIR, GROUND
-            FLOOR, 1-C-9A,B.P,<br/> BATA HARDWARE ROAD, Faridabad, Faridabad,
-            Haryana, 121001<br>
+                NEAR SHIV MANDIR, GROUND FLOOR, 1-C-9A,B.P,<br/>
+                BATA HARDWARE ROAD, Faridabad, Faridabad, Haryana, 121001<br>
                 Phone: +91-9873906044, +91-9810110903 | Email: <a href="mailto:vaishnoelectricals2@gmail.com" style="color: #3b82f6;">info@vaishnoelectricals.com</a><br>
                 GSTIN: 06CROPS7313B1ZQ
               </p>
               <p style="margin-top: 10px; font-size: 12px; color: #999;">
-                &copy; ${new Date().getFullYear()} Vaishno Electricals. All rights reserved.
+                © ${new Date().getFullYear()} Vaishno Electricals. All rights reserved.
               </p>
             </td>
           </tr>
@@ -300,15 +300,15 @@ const generateEmailTemplate = (type, data) => {
 console.log("Registering HTML routes...");
 app.get("/", (req, res) => {
   console.log("GET /");
-  res.sendFile(path.join(__dirname, "views", "index.html"));
+  res.sendFile(path.join(__dirname, "views", "try.html"));
 });
 app.get("/products", (req, res) => {
   console.log("GET /products");
-  res.sendFile(path.join(__dirname, "views", "products.html"));
+  res.sendFile(path.join(__dirname, "views", "again.html"));
 });
 app.get("/products/:id", (req, res) => {
   console.log(`GET /products/:id (${req.params.id})`);
-  res.sendFile(path.join(__dirname, "views", "product-template.html"));
+  res.sendFile(path.join(__dirname, "views", "test.html"));
 });
 app.get("/admin", (req, res) => {
   console.log("GET /admin");
@@ -323,7 +323,7 @@ app.get("/api/products", async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error fetching products:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -335,7 +335,7 @@ app.get("/api/products/:id", async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json(product);
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error("Error fetching product:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -349,7 +349,7 @@ app.get("/api/products/search/:query", async (req, res) => {
     }).limit(5);
     res.json(products);
   } catch (error) {
-    console.error("Error searching products:", error);
+    console.error("Error searching products:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -376,7 +376,7 @@ app.post("/api/admin/authenticate", async (req, res) => {
       res.status(401).json({ error: "Invalid password" });
     }
   } catch (error) {
-    console.error("Authentication error:", error);
+    console.error("Authentication error:", error.message);
     res.status(500).json({ error: "Server error: " + error.message });
   }
 });
@@ -387,7 +387,7 @@ app.get("/api/admin/products", authenticateAdmin, async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error fetching products:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -399,7 +399,7 @@ app.get("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json(product);
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error("Error fetching product:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -417,6 +417,7 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
       shortDescription,
       keyFeatures,
       specifications,
+      category,
     } = req.body;
     if (
       !id ||
@@ -430,7 +431,8 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
       !keyFeatures ||
       !Array.isArray(keyFeatures) ||
       !specifications ||
-      !Array.isArray(specifications)
+      !Array.isArray(specifications) ||
+      !category
     ) {
       return res
         .status(400)
@@ -449,10 +451,17 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
     if (quantity.value <= 0) {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
-    if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
+    if (!["kg", `item`, "meter", "set"].includes(quantity.unit)) {
       return res
         .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
+        .json({ error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'" });
+    }
+    if (
+      !["Earthing", "Lightning Protection", "Construction Use", "Other"].includes(
+        category
+      )
+    ) {
+      return res.status(400).json({ error: "Invalid category" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
@@ -478,12 +487,13 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
       shortDescription,
       keyFeatures,
       specifications,
+      category,
     });
 
     await product.save();
     res.status(201).json({ message: "Product created", product });
   } catch (error) {
-    console.error("Error creating product:", error);
+    console.error("Error creating product:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -500,6 +510,7 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
       shortDescription,
       keyFeatures,
       specifications,
+      category,
     } = req.body;
     if (
       !name ||
@@ -512,7 +523,8 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
       !keyFeatures ||
       !Array.isArray(keyFeatures) ||
       !specifications ||
-      !Array.isArray(specifications)
+      !Array.isArray(specifications) ||
+      !category
     ) {
       return res
         .status(400)
@@ -534,7 +546,14 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
       return res
         .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', or 'meter', or 'set'" });
+        .json({ error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'" });
+    }
+    if (
+      !["Earthing", "Lightning Protection", "Construction Use", "Other"].includes(
+        category
+      )
+    ) {
+      return res.status(400).json({ error: "Invalid category" });
     }
     if (specifications.some((spec) => !spec.key || !spec.value)) {
       return res
@@ -555,13 +574,14 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
         shortDescription,
         keyFeatures,
         specifications,
+        category,
       },
       { new: true }
     );
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json({ message: "Product updated", product });
   } catch (error) {
-    console.error("Error updating product:", error);
+    console.error("Error updating product:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -573,7 +593,7 @@ app.delete("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json({ message: "Product deleted" });
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error deleting product:", error.message);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -655,7 +675,7 @@ app.post("/api/contact", async (req, res) => {
 
     res.status(200).json({ message: "Message sent successfully" });
   } catch (error) {
-    console.error("Error sending contact email:", error);
+    console.error("Error sending contact email:", error.message);
     res.status(500).json({ error: `Failed to send message: ${error.message}` });
   }
 });
@@ -723,7 +743,7 @@ app.post("/api/enquiry", async (req, res) => {
 
     res.status(200).json({ message: "Enquiry sent successfully" });
   } catch (error) {
-    console.error("Error sending enquiry:", error);
+    console.error("Error sending enquiry:", error.message);
     res.status(500).json({ error: `Failed to send enquiry: ${error.message}` });
   }
 });
@@ -736,7 +756,7 @@ app.use("/api/*", (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error("Server error:", err);
+  console.error("Server error:", err.message);
   if (err.message === "Only images (jpeg, jpg, png) are allowed") {
     return res.status(400).json({ error: err.message });
   }

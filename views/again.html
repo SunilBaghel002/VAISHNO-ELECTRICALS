@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +14,372 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      /* Product Filters and Sorting */
+      .product-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .filter-group h4 {
+        margin: 0;
+        color: #1e40af;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .filter-checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .filter-checkbox {
+        width: 16px;
+        height: 16px;
+        accent-color: #1e40af;
+        cursor: pointer;
+      }
+      .filter-checkbox-label {
+        font-size: 0.9rem;
+        color: #333;
+        cursor: pointer;
+      }
+      .clear-filters {
+        padding: 0.5rem 1rem;
+        background: #e53e3e;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .clear-filters:hover {
+        background: #c53030;
+      }
+      .sort-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .sort-group label {
+        font-size: 0.9rem;
+        color: #333;
+        font-weight: 500;
+      }
+      .sort-group select {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        color: #333;
+        background: #fff;
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .sort-group select:focus {
+        border-color: #1e40af;
+        box-shadow: 0 0 5px rgba(30, 64, 175, 0.2);
+      }
+      @media (max-width: 768px) {
+        .product-controls {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+        .filter-group {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+        .sort-group {
+          width: 100%;
+        }
+        .sort-group select {
+          width: 100%;
+        }
+      }
+
+      /* Product Card Overlay */
+      .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.192);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .product-card:hover .product-overlay {
+        opacity: 1;
+      }
+      .product-btn {
+        padding: 0.5rem 1.5rem;
+        background: #fff;
+        color: #526cc4;
+        border: none;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.5s ease;
+        width: 80%;
+        justify-content: center;
+        text-align: center;
+      }
+      .product-btn:hover {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      }
+      @media (max-width: 768px) {
+        .product-btn {
+          padding: 0.4rem 1rem;
+          font-size: 0.8rem;
+          width: 90%;
+        }
+      }
+
+      /* Product Comparison */
+      .compare-checkbox {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        accent-color: #1e40af;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+      .compare-btn {
+        display: none;
+        padding: 0.5rem 1rem;
+        background: #1e40af;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .compare-btn.active {
+        display: inline-block;
+      }
+      .compare-btn:hover {
+        background: #15308f;
+      }
+      .compare-modal .modal-content {
+        max-width: 90%;
+        width: 1000px;
+        overflow-x: auto;
+      }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+      .compare-table th,
+      .compare-table td {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        text-align: left;
+        font-size: 0.9rem;
+      }
+      .compare-table th {
+        background: #1e40af;
+        color: #fff;
+        font-weight: 600;
+      }
+      .compare-table td {
+        background: #fff;
+        color: #333;
+      }
+      .compare-table img {
+        max-width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+      .compare-table .remove-btn {
+        background: #e53e3e;
+        color: #fff;
+        border: none;
+        padding: 0.3rem 0.6rem;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .compare-table .remove-btn:hover {
+        background: #c53030;
+      }
+      .no-products {
+        text-align: center;
+        color: #888;
+        padding: 1rem;
+      }
+
+      /* Specs Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+      }
+      .modal-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        position: relative;
+        animation: modalFadeIn 0.3s ease;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .modal .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 1.5rem;
+        color: #333;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+      .modal .close:hover {
+        color: #e53e3e;
+      }
+      .specs-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .specs-table td {
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+      .specs-table td:first-child {
+        font-weight: 600;
+        color: #333;
+        width: 40%;
+      }
+      .key-features {
+        list-style: disc;
+        padding-left: 1.5rem;
+        margin: 0;
+      }
+      .key-features li {
+        margin-bottom: 0.3rem;
+      }
+      .modal h3 {
+        color: #1e40af;
+        margin-bottom: 1rem;
+      }
+      .modal h4 {
+        color: #1e40af;
+        font-size: 1rem;
+        margin: 1rem 0 0.5rem;
+      }
+      @media (max-width: 768px) {
+        .modal-content {
+          width: 95%;
+          padding: 1.5rem;
+        }
+      }
+
+      /* Product Categories Section */
+      .categories {
+        padding: 2rem 0;
+        background: #fff;
+      }
+      .categories .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .category-card {
+        background: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          background 0.3s ease;
+        position: relative;
+      }
+      .category-card.active {
+        background: #e6efff;
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+      }
+      .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .category-card i {
+        font-size: 2rem;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+      .category-card h3 {
+        font-size: 1.2rem;
+        color: #333;
+        margin: 0.5rem 0;
+      }
+      .category-card p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+      }
+      @media (max-width: 768px) {
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Page Loading Animation -->
@@ -85,7 +450,9 @@
     <!-- Enquiry Modal -->
     <div class="modal" id="enquiryModal">
       <div class="modal-content">
-        <span class="close">×</span>
+        <span class="close" role="button" aria-label="Close enquiry modal"
+          >&times;</span
+        >
         <h3>Enquiry Form</h3>
         <form id="enquiryForm">
           <div class="success-message" id="enquirySuccess">
@@ -104,7 +471,7 @@
             <label for="enquiryName"
               ><i class="fas fa-user"></i> Full Name</label
             >
-            <div class="error-message">Please enter your name</div>
+            <span class="error-message">Please enter your name</span>
           </div>
           <div class="form-group">
             <input
@@ -118,7 +485,7 @@
             <label for="enquiryEmail"
               ><i class="fas fa-envelope"></i> Email Address</label
             >
-            <div class="error-message">Please enter a valid email</div>
+            <span class="error-message">Please enter a valid email</span>
           </div>
           <div class="form-group">
             <input
@@ -133,9 +500,9 @@
             <label for="enquiryPhone"
               ><i class="fas fa-phone"></i> Phone Number</label
             >
-            <div class="error-message">
-              Please enter a valid 10-digit phone number
-            </div>
+            <span class="error-message"
+              >Please enter a valid 10-digit phone number</span
+            >
           </div>
           <div class="form-group">
             <input
@@ -161,7 +528,7 @@
             <label for="enquiryMessage"
               ><i class="fas fa-comment"></i> Message</label
             >
-            <div class="error-message">Please enter your message</div>
+            <span class="error-message">Please enter your message</span>
           </div>
           <button type="submit" class="submit-btn">
             <i class="fas fa-paper-plane"></i> Send Enquiry
@@ -169,6 +536,43 @@
         </form>
       </div>
     </div>
+
+    <!-- Comparison Modal -->
+    <div class="modal compare-modal" id="compareModal">
+      <div class="modal-content">
+        <span class="close" role="button" aria-label="Close comparison modal"
+          >&times;</span
+        >
+        <h3>Compare Products</h3>
+        <div id="compareContent"></div>
+      </div>
+    </div>
+
+    <!-- Specs Modal -->
+    <div class="modal" id="specsModal">
+      <div class="modal-content">
+        <span
+          class="close"
+          role="button"
+          aria-label="Close specifications modal"
+          >&times;</span
+        >
+        <h3 id="specsModalTitle"></h3>
+        <div id="specsModalContent"></div>
+      </div>
+    </div>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories">
+      <div class="container">
+        <h2 class="section-title">Explore by Category</h2>
+        <p class="section-subtitle">
+          Browse our specialized product categories designed for various
+          electrical safety needs.
+        </p>
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </div>
+    </section>
 
     <!-- Products Section -->
     <section id="products" class="products">
@@ -178,6 +582,20 @@
           Discover our range of high-quality earthing and lightning protection
           solutions, engineered for safety and performance.
         </p>
+        <div class="product-controls">
+          <div class="filter-group" id="filterGroup">
+            <h4>Filter by Category:</h4>
+            <!-- Categories will be populated dynamically -->
+          </div>
+          <div class="sort-group">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect" aria-label="Sort products">
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+            </select>
+          </div>
+          <button id="compareBtn" class="compare-btn">Compare Selected</button>
+        </div>
         <div class="products-grid" id="productsGrid"></div>
       </div>
     </section>
@@ -198,7 +616,10 @@
               </div>
               <div class="contact-details">
                 <h4>Phone Number</h4>
-                <p>+91-9873906044, +91-9810110903</p>
+                <p>
+                  <a href="tel:+919873906044">+91 9873906044</a>
+                  <a href="tel:+919810110903">+91 9810110903</a>
+                </p>
                 <small style="color: #888"
                   >Available 24/7 for emergencies</small
                 >
@@ -211,7 +632,11 @@
               </div>
               <div class="contact-details">
                 <h4>Email Address</h4>
-                <p>vaishnoelectricals2@gmail.com</p>
+                <p>
+                  <a href="mailto:vaishnoelectricals@gmail.com"
+                    >vaishnoelectricals@gmail.com</a
+                  >
+                </p>
                 <small style="color: #888">Response within 2 hours</small>
               </div>
             </div>
@@ -367,11 +792,18 @@
             safety systems since 2010.
           </p>
           <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
           </div>
         </div>
 
@@ -394,12 +826,25 @@
         <div class="footer-section">
           <h3>Contact Info</h3>
           <p>
-            <i class="fas fa-map-marker-alt"></i> NEAR SHIV MANDIR, GROUND
-            FLOOR, 1-C-9A,B.P, BATA HARDWARE ROAD, Faridabad, Faridabad,
-            Haryana, 121001
+            <i class="fas fa-map-marker-alt"></i>
+            <a
+              href="https://www.google.com/maps/place/28.395989975789417,77.31461497548826"
+              target="_blank"
+              >NEAR SHIV MANDIR, GROUND FLOOR, 1-C-9A,B.P, BATA HARDWARE ROAD,
+              Faridabad, Faridabad, Haryana, 121001</a
+            >
           </p>
-          <p><i class="fas fa-phone"></i> +91-9873906044 , +91-9810110903</p>
-          <p><i class="fas fa-envelope"></i> vaishnoelectricals2@gmail.com</p>
+          <p>
+            <i class="fas fa-phone"></i>
+            <a href="tel:+919873906044">+91 9873906044</a>
+            <a href="tel:+919810110903">+91 9810110903</a>
+          </p>
+          <p>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:vaishnoelectricals@gmail.com"
+              >vaishnoelectricals@gmail.com</a
+            >
+          </p>
           <p><i class="fas fa-clock"></i> Mon-Sat: 9AM-6PM</p>
         </div>
       </div>
@@ -449,24 +894,67 @@
     </button>
 
     <script>
-      // Mock data for fallback
+      // Mock data with categories
       const mockProducts = [
         {
-          id: 1,
+          id: "1",
           name: "Chemical Earthing",
           shortDescription: "High-quality chemical earthing solution.",
+          category: "Earthing",
+          specifications: [
+            { key: "Material", value: "Copper" },
+            { key: "Length", value: "3m" },
+          ],
+          keyFeatures: ["Durable", "Low Maintenance"],
+          image: "/images/placeholder.jpg",
         },
         {
-          id: 2,
+          id: "2",
           name: "Lightning Arrestor",
           shortDescription: "Advanced lightning protection system.",
+          category: "Lightning Protection",
+          specifications: [
+            { key: "Protection Radius", value: "100m" },
+            { key: "Material", value: "Stainless Steel" },
+          ],
+          keyFeatures: ["High Efficiency", "Weather Resistant"],
+          image: "/images/placeholder.jpg",
         },
         {
-          id: 3,
+          id: "3",
           name: "Copper Electrode",
           shortDescription: "Durable copper electrode for earthing.",
+          category: "Earthing",
+          specifications: [
+            { key: "Diameter", value: "50mm" },
+            { key: "Weight", value: "5kg" },
+          ],
+          keyFeatures: ["Corrosion Resistant", "Easy Installation"],
+          image: "/images/placeholder.jpg",
         },
       ];
+
+      // Category metadata
+      const categoryMeta = {
+        Earthing: {
+          icon: "fas fa-bolt",
+          description:
+            "Reliable earthing solutions for electrical safety and grounding.",
+        },
+        "Lightning Protection": {
+          icon: "fas fa-cloud-bolt",
+          description: "Advanced systems to protect against lightning strikes.",
+        },
+        "Construction Use": {
+          icon: "fas fa-tools",
+          description:
+            "Durable products designed for construction applications.",
+        },
+        Other: {
+          icon: "fas fa-box",
+          description: "Miscellaneous electrical safety products.",
+        },
+      };
 
       // Debounce utility
       function debounce(func, delay) {
@@ -649,6 +1137,346 @@
         });
       }
 
+      // Product Filters and Sorting
+      let allProducts = [];
+      const filterGroup = document.getElementById("filterGroup");
+      const sortSelect = document.getElementById("sortSelect");
+      const compareBtn = document.getElementById("compareBtn");
+
+      function populateFilters(categories) {
+        filterGroup.innerHTML = "<h4>Filter by Category:</h4>";
+        categories.forEach((category) => {
+          const container = document.createElement("div");
+          container.className = "filter-checkbox-container";
+          container.innerHTML = `
+            <input
+              type="checkbox"
+              class="filter-checkbox"
+              id="filter-${category}"
+              value="${category}"
+              checked
+              aria-label="Filter by ${category}"
+            />
+            <label class="filter-checkbox-label" for="filter-${category}">${category}</label>
+          `;
+          filterGroup.appendChild(container);
+        });
+        const clearBtn = document.createElement("button");
+        clearBtn.className = "clear-filters";
+        clearBtn.textContent = "Clear Filters";
+        clearBtn.setAttribute("aria-label", "Clear all category filters");
+        filterGroup.appendChild(clearBtn);
+
+        // Add clear filters listener
+        clearBtn.addEventListener("click", () => {
+          document.querySelectorAll(".filter-checkbox").forEach((cb) => {
+            cb.checked = true;
+          });
+          document.querySelectorAll(".category-card").forEach((card) => {
+            card.classList.remove("active");
+          });
+          displayProducts(allProducts);
+        });
+      }
+
+      function populateCategories(categories) {
+        const categoriesGrid = document.getElementById("categoriesGrid");
+        categoriesGrid.innerHTML = "";
+        categories.forEach((category) => {
+          const meta = categoryMeta[category] || {
+            icon: "fas fa-box",
+            description: "Miscellaneous products.",
+          };
+          const card = `
+            <div
+              class="category-card fade-in"
+              data-category="${category}"
+              role="button"
+              tabindex="0"
+              aria-label="Filter by ${category}"
+            >
+              <i class="${meta.icon}"></i>
+              <h3>${category}</h3>
+              <p>${meta.description}</p>
+            </div>`;
+          categoriesGrid.insertAdjacentHTML("beforeend", card);
+        });
+
+        // Add click and keypress listeners for category cards
+        document.querySelectorAll(".category-card").forEach((card) => {
+          const handleInteraction = () => {
+            const category = card.getAttribute("data-category");
+            const checkbox = document.getElementById(`filter-${category}`);
+            if (checkbox) {
+              document
+                .querySelectorAll(".filter-checkbox")
+                .forEach((cb) => (cb.checked = false));
+              checkbox.checked = true;
+              document
+                .querySelectorAll(".category-card")
+                .forEach((c) => c.classList.remove("active"));
+              card.classList.add("active");
+              displayProducts(allProducts);
+              window.scrollTo({
+                top:
+                  document.getElementById("products").offsetTop -
+                  header.offsetHeight,
+                behavior: "smooth",
+              });
+            }
+          };
+          card.addEventListener("click", handleInteraction);
+          card.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleInteraction();
+            }
+          });
+        });
+
+        initFadeInElements();
+      }
+
+      function applyFiltersAndSort(products) {
+        let filteredProducts = [...products];
+
+        // Apply category filters
+        const checkboxes = document.querySelectorAll(
+          ".filter-checkbox:checked"
+        );
+        const selectedCategories = Array.from(checkboxes).map((cb) => cb.value);
+        if (selectedCategories.length > 0) {
+          filteredProducts = filteredProducts.filter(
+            (product) =>
+              product.category && selectedCategories.includes(product.category)
+          );
+        }
+
+        // Apply sorting
+        const sortValue = sortSelect.value;
+        if (sortValue === "name-asc") {
+          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortValue === "name-desc") {
+          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+        }
+
+        return filteredProducts;
+      }
+
+      function displayProducts(products) {
+        const productsGrid = document.getElementById("productsGrid");
+        const productsDropdown = document.getElementById("productsDropdown");
+        const footerProducts = document.getElementById("footerProducts");
+
+        if (!productsGrid || !productsDropdown || !footerProducts) return;
+
+        productsGrid.innerHTML = "";
+        productsDropdown.innerHTML = "";
+        footerProducts.innerHTML = "";
+
+        const filteredProducts = applyFiltersAndSort(products);
+
+        if (filteredProducts.length === 0) {
+          productsGrid.innerHTML = "<p>No products found.</p>";
+          return;
+        }
+
+        filteredProducts.forEach((product) => {
+          if (!product || !product.id) return;
+          const card = `
+            <div class="product-card fade-in">
+              
+              <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.src='/images/placeholder.jpg'" />
+              <h3>${product.name}</h3>
+              <p>${product.shortDescription}</p>
+              <div class="product-overlay">
+                <input type="checkbox" class="compare-checkbox" value="${product.id}" aria-label="Select ${product.name} for comparison" />
+                <a href="/products/${product.id}" class="product-btn">
+                  <i class="fas fa-eye"></i> View Product
+                </a>
+                <button class="product-btn enquiry-btn" data-product="${product.name}">
+                  <i class="fas fa-question-circle"></i> Enquiry
+                </button>
+                <button class="product-btn specs-btn" data-id="${product.id}">
+                  <i class="fas fa-info-circle"></i> View Specs
+                </button>
+              </div>
+            </div>`;
+          productsGrid.insertAdjacentHTML("beforeend", card);
+
+          const dropdownItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
+          productsDropdown.insertAdjacentHTML("beforeend", dropdownItem);
+
+          const footerItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
+          footerProducts.insertAdjacentHTML("beforeend", footerItem);
+        });
+
+        // Add comparison checkbox listeners
+        document.querySelectorAll(".compare-checkbox").forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const selected = document.querySelectorAll(
+              ".compare-checkbox:checked"
+            );
+            if (selected.length > 3) {
+              checkbox.checked = false;
+              alert("You can compare up to 3 products.");
+            }
+            updateCompareButton();
+          });
+        });
+
+        // Add specs button listeners
+        const specsModal = document.getElementById("specsModal");
+        const specsModalTitle = document.getElementById("specsModalTitle");
+        const specsModalContent = document.getElementById("specsModalContent");
+        document.querySelectorAll(".specs-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const product = allProducts.find((p) => p.id === id);
+            if (product && specsModal && specsModalTitle && specsModalContent) {
+              specsModalTitle.textContent = product.name;
+              const specsTable =
+                product.specifications
+                  ?.map(
+                    (spec) =>
+                      `<tr><td>${spec.key}</td><td>${spec.value}</td></tr>`
+                  )
+                  .join("") ||
+                "<tr><td colspan='2'>No specifications available</td></tr>";
+              const keyFeaturesList =
+                product.keyFeatures
+                  ?.map((feature) => `<li>${feature}</li>`)
+                  .join("") || "<li>No key features available</li>";
+              specsModalContent.innerHTML = `
+                <h4>Specifications</h4>
+                <table class="specs-table">
+                  ${specsTable}
+                </table>
+                <h4>Key Features</h4>
+                <ul class="key-features">
+                  ${keyFeaturesList}
+                </ul>`;
+              specsModal.style.display = "flex";
+              specsModal.focus();
+            }
+          });
+        });
+
+        // Add filter listeners
+        document.querySelectorAll(".filter-checkbox").forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const selectedCategories = Array.from(
+              document.querySelectorAll(".filter-checkbox:checked")
+            ).map((cb) => cb.value);
+            document.querySelectorAll(".category-card").forEach((card) => {
+              const category = card.getAttribute("data-category");
+              card.classList.toggle(
+                "active",
+                selectedCategories.includes(category)
+              );
+            });
+            displayProducts(allProducts);
+          });
+        });
+
+        initFadeInElements();
+      }
+
+      // Specs Modal Listeners
+      const specsModal = document.getElementById("specsModal");
+      const specsClose = specsModal?.querySelector(".close");
+      if (specsModal && specsClose) {
+        specsClose.addEventListener("click", () => {
+          specsModal.style.display = "none";
+        });
+        window.addEventListener("click", (e) => {
+          if (e.target === specsModal) {
+            specsModal.style.display = "none";
+          }
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && specsModal.style.display === "flex") {
+            specsModal.style.display = "none";
+          }
+        });
+      }
+
+      // Product Comparison
+      const compareModal = document.getElementById("compareModal");
+      const compareContent = document.getElementById("compareContent");
+      const compareClose = compareModal?.querySelector(".close");
+
+      function updateCompareButton() {
+        const selected = document.querySelectorAll(".compare-checkbox:checked");
+        compareBtn.classList.toggle("active", selected.length >= 2);
+      }
+
+      function renderComparison() {
+        const selectedIds = Array.from(
+          document.querySelectorAll(".compare-checkbox:checked")
+        ).map((cb) => cb.value);
+        const selectedProducts = allProducts.filter(
+          (p) => p && selectedIds.includes(p.id)
+        );
+
+        if (selectedProducts.length === 0) {
+          compareContent.innerHTML = `<p class="no-products">No valid products selected for comparison.</p>`;
+          return;
+        }
+
+        const table = `
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                ${selectedProducts
+                  .map(
+                    (p) =>
+                      `<th>${p.name} <button class="remove-btn" data-id="${p.id}">Remove</button></th>`
+                  )
+                  .join("")}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Image</td>
+                ${selectedProducts
+                  .map(
+                    (p) =>
+                      `<td><img src="${p.image}" alt="${p.name}" onerror="this.src='/images/placeholder.jpg'" /></td>`
+                  )
+                  .join("")}
+              </tr>
+              <tr>
+                <td>Description</td>
+                ${selectedProducts
+                  .map((p) => `<td>${p.shortDescription}</td>`)
+                  .join("")}
+              </tr>
+              <tr>
+                <td>Category</td>
+                ${selectedProducts
+                  .map((p) => `<td>${p.category || "N/A"}</td>`)
+                  .join("")}
+              </tr>
+            </tbody>
+          </table>
+        `;
+        compareContent.innerHTML = table;
+
+        compareContent.querySelectorAll(".remove-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const checkbox = document.querySelector(
+              `.compare-checkbox[value="${id}"]`
+            );
+            if (checkbox) checkbox.checked = false;
+            updateCompareButton();
+            renderComparison();
+          });
+        });
+      }
+
       // Load Products with Minimum 2-Second Delay
       async function loadProducts() {
         const productsGrid = document.getElementById("productsGrid");
@@ -670,15 +1498,40 @@
 
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-          const products = await response.json();
-          if (!Array.isArray(products))
+          allProducts = await response.json();
+          if (!Array.isArray(allProducts))
             throw new Error("Response is not an array");
-          displayProducts(products);
+
+          const categories = [
+            ...new Set(
+              allProducts
+                .map((p) => p.category)
+                .filter((c) => c && typeof c === "string")
+            ),
+          ].sort();
+          if (categories.length > 0) {
+            populateFilters(categories);
+            populateCategories(categories);
+          } else {
+            filterGroup.innerHTML =
+              "<h4>Filter by Category:</h4><p>No categories available</p>";
+            document.getElementById("categoriesGrid").innerHTML =
+              "<p>No categories available</p>";
+          }
+
+          sortSelect.addEventListener("change", () =>
+            displayProducts(allProducts)
+          );
         } catch (error) {
           console.error("Error loading products:", error);
           productsGrid.innerHTML =
             "<p>Error loading products. Please try again later.</p>";
-          displayProducts(mockProducts);
+          allProducts = mockProducts;
+          const mockCategories = [
+            ...new Set(mockProducts.map((p) => p.category)),
+          ].sort();
+          populateFilters(mockCategories);
+          populateCategories(mockCategories);
         } finally {
           pageLoading.classList.add("hidden");
           setTimeout(() => {
@@ -686,44 +1539,30 @@
           }, 500);
         }
 
-        function displayProducts(products) {
-          productsGrid.innerHTML = "";
-          productsDropdown.innerHTML = "";
-          footerProducts.innerHTML = "";
+        displayProducts(allProducts);
+      }
 
-          if (products.length === 0) {
-            productsGrid.innerHTML = "<p>No products found.</p>";
-            return;
+      // Comparison Modal Listeners
+      if (compareModal && compareBtn) {
+        compareBtn.addEventListener("click", () => {
+          renderComparison();
+          compareModal.style.display = "flex";
+        });
+
+        compareClose?.addEventListener("click", () => {
+          compareModal.style.display = "none";
+        });
+
+        window.addEventListener("click", (e) => {
+          if (e.target === compareModal) {
+            compareModal.style.display = "none";
           }
-
-          products.forEach((product) => {
-            const card = `
-              <div class="product-card fade-in">
-                <img src="/images/${product.name}.jpg" alt="${
-              product.name
-            }" class="product-image" loading="lazy" />
-                <h3>${product.name}</h3>
-                <p>${product.shortDescription}</p>
-                <div class="product-overlay">
-                  <a href="/products/${product.id}" class="product-btn">
-                    <i class="fas fa-eye"></i> View Product
-                  </a>
-                  <button class="product-btn enquiry-btn" data-product="${product.name}">
-                    <i class="fas fa-question-circle"></i> Enquiry
-                  </button>
-                </div>
-              </div>`;
-            productsGrid.insertAdjacentHTML("beforeend", card);
-
-            const dropdownItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
-            productsDropdown.insertAdjacentHTML("beforeend", dropdownItem);
-
-            const footerItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
-            footerProducts.insertAdjacentHTML("beforeend", footerItem);
-          });
-
-          initFadeInElements();
-        }
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && compareModal.style.display === "flex") {
+            compareModal.style.display = "none";
+          }
+        });
       }
 
       // Form Submission
@@ -790,25 +1629,22 @@
 
           let isValid = true;
           if (!data.name) {
-            document.querySelector(
-              "#enquiryName ~ .error-message"
-            ).style.display = "block";
+            form.querySelector("#enquiryName ~ .error-message").style.display =
+              "block";
             isValid = false;
           }
           if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-            document.querySelector(
-              "#enquiryEmail ~ .error-message"
-            ).style.display = "block";
+            form.querySelector("#enquiryEmail ~ .error-message").style.display =
+              "block";
             isValid = false;
           }
           if (!data.phone || !/^[0-9]{10}$/.test(data.phone)) {
-            document.querySelector(
-              "#enquiryPhone ~ .error-message"
-            ).style.display = "block";
+            form.querySelector("#enquiryPhone ~ .error-message").style.display =
+              "block";
             isValid = false;
           }
           if (!data.message) {
-            document.querySelector(
+            form.querySelector(
               "#enquiryMessage ~ .error-message"
             ).style.display = "block";
             isValid = false;
@@ -876,23 +1712,29 @@
       // Enquiry Modal
       const enquiryModal = document.getElementById("enquiryModal");
       const enquiryProductInput = document.getElementById("enquiryProduct");
-      const closeModal = document.querySelector(".modal .close");
+      const enquiryClose = enquiryModal?.querySelector(".close");
 
       if (enquiryModal && enquiryProductInput) {
         document.addEventListener("click", (e) => {
           if (e.target.classList.contains("enquiry-btn")) {
             const productName = e.target.getAttribute("data-product");
             enquiryProductInput.value = productName;
-            enquiryModal.style.display = "block";
+            enquiryModal.style.display = "flex";
           }
         });
 
-        closeModal?.addEventListener("click", () => {
+        enquiryClose?.addEventListener("click", () => {
           enquiryModal.style.display = "none";
         });
 
         window.addEventListener("click", (e) => {
           if (e.target === enquiryModal) {
+            enquiryModal.style.display = "none";
+          }
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && enquiryModal.style.display === "flex") {
             enquiryModal.style.display = "none";
           }
         });
