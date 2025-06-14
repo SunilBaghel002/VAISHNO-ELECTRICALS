@@ -16,12 +16,12 @@ const port = process.env.PORT || 3000;
 // Ensure public and uploads directories exist
 const publicDir = path.join(__dirname, "public");
 const uploadsDir = path.join(publicDir, "Uploads");
-if (!fs.existsSync(publicDir)) {
+/*if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
-}
+}*/
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
