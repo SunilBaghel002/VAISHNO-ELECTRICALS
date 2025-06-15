@@ -17,7 +17,6 @@ const port = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, "public");
 const uploadsDir = path.join(publicDir, "Uploads");
 
-
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -80,7 +79,11 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     value: { type: Number, required: true, min: 0 },
-    unit: { type: String, required: true, enum: ["kg", "item", "meter", "set"] },
+    unit: {
+      type: String,
+      required: true,
+      enum: ["kg", "item", "meter", "set"],
+    },
   },
   image: { type: String, required: true },
   description: { type: String, required: true },
@@ -250,7 +253,7 @@ const generateEmailTemplate = (type, data) => {
           <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #3b82f6, #1e40af); padding: 20px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-              <img src="http://localhost:3000/images/logo.svg" alt="Vaishno Electricals Logo" style="max-width: 150px;">
+              <img src="cid:unique@logo" alt="Vaishno Electricals Logo" style="max-width: 150px;">
             </td>
           </tr>
           <!-- Body -->
@@ -288,6 +291,13 @@ const generateEmailTemplate = (type, data) => {
       </body>
       </html>
     `,
+    attachments: [
+      {
+        filename: "logo.png",
+        path: path.join(__dirname, "/images/logo-1.png"), // Make sure the path is correct
+        cid: "unique@logo", // Same as in the img src
+      },
+    ],
   };
 };
 
@@ -449,12 +459,17 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
     if (!["kg", `item`, "meter", "set"].includes(quantity.unit)) {
       return res
         .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'" });
+        .json({
+          error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
+        });
     }
     if (
-      !["Earthing", "Lightning Protection", "Construction Use", "Other"].includes(
-        category
-      )
+      ![
+        "Earthing",
+        "Lightning Protection",
+        "Construction Use",
+        "Other",
+      ].includes(category)
     ) {
       return res.status(400).json({ error: "Invalid category" });
     }
@@ -541,12 +556,17 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
     if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
       return res
         .status(400)
-        .json({ error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'" });
+        .json({
+          error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
+        });
     }
     if (
-      !["Earthing", "Lightning Protection", "Construction Use", "Other"].includes(
-        category
-      )
+      ![
+        "Earthing",
+        "Lightning Protection",
+        "Construction Use",
+        "Other",
+      ].includes(category)
     ) {
       return res.status(400).json({ error: "Invalid category" });
     }
