@@ -16,12 +16,21 @@ const port = process.env.PORT || 3000;
 // Ensure public and uploads directories exist
 const publicDir = path.join(__dirname, "public");
 const uploadsDir = path.join(publicDir, "Uploads");
+<<<<<<< Updated upstream
 /*if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir, { recursive: true });
 }
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }*/
+=======
+// if (!fs.existsSync(publicDir)) {
+//   fs.mkdirSync(publicDir, { recursive: true });
+// }
+// if (!fs.existsSync(uploadsDir)) {
+//   fs.mkdirSync(uploadsDir, { recursive: true });
+// }
+>>>>>>> Stashed changes
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -312,7 +321,7 @@ app.get("/products/:id", (req, res) => {
 });
 app.get("/admin", (req, res) => {
   console.log("GET /admin");
-  res.sendFile(path.join(__dirname, "views", "admin.html"));
+  res.sendFile(path.join(__dirname, "views", "admin2.html"));
 });
 
 // API Routes - Products
