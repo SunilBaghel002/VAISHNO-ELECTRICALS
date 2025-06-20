@@ -301,23 +301,26 @@ const generateEmailTemplate = (type, data) => {
   };
 };
 
-// HTML Routes
-console.log("Registering HTML routes...");
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// EJS Routes
+console.log("Registering routes...");
 app.get("/", (req, res) => {
   console.log("GET /");
-  res.sendFile(path.join(__dirname, "views", "try.html"));
+  res.render("index");
 });
 app.get("/products", (req, res) => {
   console.log("GET /products");
-  res.sendFile(path.join(__dirname, "views", "again.html"));
+  res.render("products");
 });
 app.get("/products/:id", (req, res) => {
   console.log(`GET /products/:id (${req.params.id})`);
-  res.sendFile(path.join(__dirname, "views", "test.html"));
+  res.render("product-template", { id: req.params.id });
 });
 app.get("/admin", (req, res) => {
   console.log("GET /admin");
-  res.sendFile(path.join(__dirname, "views", "admin2.html"));
+  res.render("admin");
 });
 
 // API Routes - Products
@@ -457,11 +460,9 @@ app.post("/api/admin/products", authenticateAdmin, async (req, res) => {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
     if (!["kg", `item`, "meter", "set"].includes(quantity.unit)) {
-      return res
-        .status(400)
-        .json({
-          error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
-        });
+      return res.status(400).json({
+        error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
+      });
     }
     if (
       ![
@@ -554,11 +555,9 @@ app.put("/api/admin/products/:id", authenticateAdmin, async (req, res) => {
       return res.status(400).json({ error: "Quantity value must be positive" });
     }
     if (!["kg", "item", "meter", "set"].includes(quantity.unit)) {
-      return res
-        .status(400)
-        .json({
-          error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
-        });
+      return res.status(400).json({
+        error: "Quantity unit must be 'kg', 'item', 'meter', or 'set'",
+      });
     }
     if (
       ![

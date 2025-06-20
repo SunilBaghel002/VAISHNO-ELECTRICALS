@@ -1,9 +1,9 @@
+const adminToken = localStorage.getItem("adminToken");
+
 // Authentication Check
 if (!localStorage.getItem("adminAuth")) {
   window.location.href = "/";
 }
-
-const adminToken = localStorage.getItem("adminToken");
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
@@ -166,6 +166,7 @@ productForm.addEventListener("submit", async (e) => {
   errorMessage.classList.remove("active");
 
   const name = document.getElementById("name").value.trim();
+  const category = document.getElementById("category").value; // CHANGED: Renamed from categoryId
   const customPrice = document.getElementById("customPrice").checked;
   const price = customPrice
     ? "As per requirement"
@@ -194,6 +195,7 @@ productForm.addEventListener("submit", async (e) => {
   // Validation
   if (
     !name ||
+    !category ||
     (!customPrice && (isNaN(price) || price < 0)) ||
     quantityValue <= 0 ||
     !quantityUnit ||
@@ -204,7 +206,7 @@ productForm.addEventListener("submit", async (e) => {
   ) {
     loading.classList.remove("active");
     errorMessage.textContent =
-      "Please fill in all required fields, including a valid price (if not custom) and quantity (>0) with unit.";
+      "Please fill in all required fields, including a valid price (if not custom), quantity (>0) with unit, and category.";
     errorMessage.classList.add("active");
     return;
   }
@@ -243,6 +245,7 @@ productForm.addEventListener("submit", async (e) => {
       description,
       keyFeatures,
       specifications,
+      category, // CHANGED: Send category as string instead of { id: categoryId }
     };
 
     const method = productData.id.startsWith("prod_") ? "POST" : "PUT";
@@ -268,6 +271,7 @@ productForm.addEventListener("submit", async (e) => {
       specFields.innerHTML = "";
       document.getElementById("productId").value = "";
       document.getElementById("quantityUnit").value = "";
+      document.getElementById("category").value = "";
       customPriceCheckbox.checked = false;
       priceInput.disabled = false;
       loadProducts();
@@ -305,6 +309,7 @@ window.editProduct = async (id) => {
     const product = await response.json();
     document.getElementById("productId").value = product.id;
     document.getElementById("name").value = product.name;
+    document.getElementById("category").value = product.category || ""; // CHANGED: Use category string directly
     if (product.price === "As per requirement") {
       document.getElementById("customPrice").checked = true;
       document.getElementById("price").disabled = true;
@@ -391,8 +396,9 @@ window.deleteProduct = async (id) => {
 // Initialize
 window.addEventListener("load", () => {
   document.body.style.opacity = "1";
-  addSpecField(); // Add one specification field by default
+  addSpecField();
   loadProducts();
+  // CHANGED: Removed loadCategories call since categories are hardcoded
 });
 
 document.body.style.opacity = "0";

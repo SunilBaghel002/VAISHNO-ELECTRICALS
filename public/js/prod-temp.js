@@ -1,57 +1,194 @@
-// Mobile Menu Toggle
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const navLinks = document.getElementById("navLinks");
-const navItems = document.querySelectorAll(".nav-item");
+let currentProductName = ""; // CHANGED: Global variable to store current product name
 
-mobileMenuBtn.addEventListener("click", () => {
-  navLinks.classList.toggle("active");
-  const icon = mobileMenuBtn.querySelector("i");
-  icon.classList.toggle("fa-bars");
-  icon.classList.toggle("fa-times");
-});
+// Mock Data
+const mockProduct = {
+  id: "1",
+  name: "Poly Plastic Earth Pit Cover",
+  price: "750",
+  quantity: { value: "1", unit: "item" },
+  description: "Our Poly Plastic Earth Pit Cover is a high-strength, weather-resistant enclosure designed to safely cover and protect earthing pits. Made from UV-stabilized, high-density polyethylene (HDPE), it ensures long-term durability, electrical insulation, and ease of inspection in residential, commercial, and industrial earthing systems.",
+  keyFeatures: ["Non-corrosiveand ", "Lightweight", "Impact-resistant"],
+  specifications: [
+    { key: "Size", value: "10 inch" },
+    { key: "Length", value: "3m" },
+  ],
+  category: { name: "Lighting Protection" },
+  image: "/images/Poly Plastic Earth Pit Cover.jpg",
+};
+const mockProducts = [
+  {
+    id: 1,
+    name: "Poly Plastic Earth Pit Cover",
+    shortDescription:
+      "Poly Plastic Earth Pit Cover – Durable & Weatherproof Earthing Protection",
+    category: { name: "Lighting Protection" },
+    image: "/images/Poly Plastic Earth Pit Cover.jpg",
+  },
+  {
+    id: 2,
+    name: "Gi Strip",
+    shortDescription:
+      "GI Strip – Galvanized Iron Flat Strip for Electrical & Construction Use",
+    category: { name: "Construction Use" },
+    image: "/images/Gi Strip.jpg",
+  },
+  {
+    id: 3,
+    name: "Copper Plate",
+    shortDescription:
+      "Copper Plate – High Conductivity Electrolytic Copper Sheet",
+    category: { name: "Construction Use" },
+    image: "/images/Copper Plate.jpg",
+  },
+  {
+    id: 4,
+    name: "Copper Lighting Arrester",
+    shortDescription:
+      "Copper Lightning Arrester – High-Efficiency Air Terminal for Surge Protection",
+    category: { name: "Lighting Protection" },
+    image: "/images/Copper Lighting Arrester.jpg",
+  },
+  {
+    id: 5,
+    name: "Copper Cable",
+    shortDescription:
+      "Copper Cable – High Conductivity Electrical Cable for Reliable Power Transmission",
+    category: { name: "Lighting Protection" },
+    image: "/images/Copper Cable.jpg",
+  },
+  {
+    id: 6,
+    name: "Copper Chemical Earthing",
+    shortDescription:
+      "Copper Chemical Earthing – Maintenance-Free and Long-Lasting Grounding Solution",
+    category: { name: "Earthing" },
+    image: "/images/Copper Chemical Earthing.jpg",
+  },
+  {
+    id: 7,
+    name: "GI Maintenance Free Earthing",
+    shortDescription:
+      "GI Maintenance-Free Earthing – Reliable & Cost-Effective Grounding Solution",
+    category: { name: "Earthing" },
+    image: "/images/GI Maintenance Free Earthing.jpg",
+  },
+];
 
-navItems.forEach((item) => {
-  item.addEventListener("click", (e) => {
-    if (window.innerWidth <= 768) {
-      e.preventDefault();
-      const isActive = item.classList.contains("active");
-      navItems.forEach((i) => i.classList.remove("active"));
-      if (!isActive) {
-        item.classList.add("active");
+// Utilities
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+function createFocusTrap(elementId, focusableElements) {
+  const modal = document.getElementById(elementId);
+  const focusable = modal.querySelectorAll(focusableElements);
+  const firstFocusable = focusable[0];
+  const lastFocusable = focusable[focusable.length - 1];
+
+  modal.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      if (e.shiftKey && document.activeElement === firstFocusable) {
+        e.preventDefault();
+        lastFocusable.focus();
+      } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
       }
     }
   });
-});
 
-document.addEventListener("mousedown", (e) => {
-  if (!e.target.closest(".nav-item") && !e.target.closest(".mobile-menu-btn")) {
-    navItems.forEach((item) => item.classList.remove("active"));
-    if (window.innerWidth <= 768 && navLinks.classList.contains("active")) {
-      navLinks.classList.remove("active");
-      const icon = mobileMenuBtn.querySelector("i");
-      icon.classList.add("fa-bars");
-      icon.classList.remove("fa-times");
-    }
+  return firstFocusable;
+}
+
+// Admin Prompt
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === "U") {
+    e.preventDefault();
+    const adminPrompt = document.getElementById("adminPrompt");
+    adminPrompt.classList.add("active");
+    document.getElementById("adminPassword").focus();
   }
 });
 
-// Header Scroll Effect
-const header = document.getElementById("header");
-window.addEventListener("scroll", () => {
-  header.classList.toggle("header-scrolled", window.scrollY > 100);
+async function validateAdmin() {
+  const password = document.getElementById("adminPassword").value.trim();
+  const adminPrompt = document.getElementById("adminPrompt");
+  if (!password) {
+    alert("Please enter a password.");
+    return;
+  }
+  try {
+    const response = await fetch("/api/admin/authenticate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    if (!response.ok) throw new Error("Invalid password");
+    const data = await response.json();
+    localStorage.setItem("adminAuth", "true");
+    localStorage.setItem("adminToken", data.token);
+    adminPrompt.classList.remove("active");
+    window.location.href = "/admin";
+  } catch (err) {
+    console.error("Admin auth failed:", err);
+    alert("Invalid password.");
+    document.getElementById("adminPassword").value = "";
+  }
+}
+
+// Mobile Menu
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const navLinks = document.getElementById("navLinks");
+
+function toggleMobileMenu() {
+  const isActive = navLinks.classList.contains("active");
+  navLinks.classList.toggle("active");
+  mobileMenuBtn.classList.toggle("active");
+  mobileMenuBtn.setAttribute("aria-expanded", !isActive);
+  document.body.style.overflow = isActive ? "auto" : "hidden";
+  if (!isActive) {
+    const firstLink = navLinks.querySelector("a");
+    if (firstLink) firstLink.focus();
+  }
+}
+
+mobileMenuBtn.addEventListener("click", toggleMobileMenu);
+
+document.addEventListener("click", (e) => {
+  if (
+    !e.target.closest(".nav-links") &&
+    !e.target.closest(".mobile-menu-btn") &&
+    navLinks.classList.contains("active")
+  ) {
+    toggleMobileMenu();
+  }
 });
 
-// Smooth Scrolling
+// Header Scroll
+const header = document.getElementById("header");
+window.addEventListener("scroll", () => {
+  header.classList.toggle("header-scrolled", window.scrollY > 80);
+});
+
+// Smooth Scroll
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
+  anchor.addEventListener("click", (e) => {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
+    const targetId = anchor.getAttribute("href");
+    const target = document.querySelector(targetId);
     if (target) {
       const headerHeight = header.offsetHeight;
       window.scrollTo({
         top: target.offsetTop - headerHeight,
         behavior: "smooth",
       });
+      if (navLinks.classList.contains("active")) {
+        toggleMobileMenu();
+      }
     }
   });
 });
@@ -61,146 +198,378 @@ const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.style.animation = "fadeInUp 0.8s ease forwards";
+        entry.target.style.animation = "fadeInUp 0.6s ease forwards";
         observer.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+  { threshold: 0.1 }
 );
 
-document.querySelectorAll(".fade-in").forEach((el) => {
-  el.style.opacity = "0";
-  el.style.transform = "translateY(20px)";
-  observer.observe(el);
-});
+function initFadeIn() {
+  document.querySelectorAll(".fade-in").forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
+    observer.observe(el);
+  });
+}
 
 // Scroll to Top
-const scrollBtn = document.getElementById("scrollBtn");
+const scrollTop = document.getElementById("scrollTop");
 window.addEventListener("scroll", () => {
-  scrollBtn.classList.toggle("visible", window.scrollY > 300);
+  scrollTop.classList.toggle("visible", window.scrollY > 200);
 });
-scrollBtn.addEventListener("click", () => {
+scrollTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Load Products for Dropdown and Footer
-async function loadDropdownAndFooter() {
-  try {
-    const response = await fetch("/api/products");
-    if (!response.ok) throw new Error("Failed to fetch products");
-    const products = await response.json();
-    const dropdown = document.getElementById("productsDropdown");
-    const footerProducts = document.getElementById("footerProducts");
-    dropdown.innerHTML = "";
-    footerProducts.innerHTML = "";
-    if (!Array.isArray(products) || products.length === 0) {
-      dropdown.innerHTML = '<li><a href="#">No products available</a></li>';
-      return;
-    }
-    products.forEach((product, index) => {
-      const dropdownItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
-      dropdown.insertAdjacentHTML("beforeend", dropdownItem);
-      if (index < 5) {
-        const footerItem = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
-        footerProducts.insertAdjacentHTML("beforeend", footerItem);
-      }
-    });
-  } catch (error) {
-    console.error("Error loading products:", error);
-  }
-}
-
-// Load Product Details
-// Load Product Details
+// Load Product
 async function loadProduct() {
+  const pageLoading = document.getElementById("pageLoading");
+  const productContainer = document.getElementById("productContainer");
+  const technicalDescription = document.getElementById("technicalDescription");
+  const benefitsGrid = document.getElementById("benefitsGrid");
+  const whatsappFloat = document.getElementById("whatsappFloat");
+  const enquiryProduct = document.getElementById("enquiryProduct");
+
   const pathSegments = window.location.pathname.split("/");
-  const productId = pathSegments[pathSegments.length - 1].replace(
-    /\.html$/,
-    ""
-  );
+  const productId = pathSegments[pathSegments.length - 1].replace(/\.ejs$/, "");
   if (!productId || productId === "products") {
-    document.querySelector(".product-details .container").innerHTML =
-      "<p>Product ID is missing.</p>";
+    productContainer.innerHTML = "<p>Invalid product ID.</p>";
+    pageLoading.classList.add("hidden");
     return;
   }
+
+  const timeout = 5000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
   try {
-    const response = await fetch(`/api/products/${productId}`);
+    const response = await fetch(`/api/products/${productId}`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || "Product not found");
     }
     const product = await response.json();
-    document.getElementById("productName").textContent = product.name;
-    document.getElementById("productPrice").textContent =
-      typeof product.price === "string"
-        ? product.price
-        : `₹${(product.price || 0).toFixed(2)}`;
-    document.getElementById("productQuantity").textContent = product.quantity
-      ? `/ ${product.quantity.value} ${
-          product.quantity.unit === "kg"
-            ? "kg"
-            : product.quantity.unit === "meter"
-            ? "meter"
-            : product.quantity.unit === "set"
-            ? "set"
-            : "item"
-        }`
-      : "/ unit";
-const imageUrl=`/images/${product.name}.jpg`;
-    document.getElementById("productImage").src =       imageUrl;
-    document.getElementById("productImage").alt = product.name;
-    document.getElementById("productDescription").textContent =
-      product.description;
-    const featuresList = document.getElementById("productFeatures");
-    featuresList.innerHTML = "";
-    (product.keyFeatures || []).forEach((feature) => {
-      featuresList.insertAdjacentHTML(
-        "beforeend",
-        `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
-      );
-    });
-    const specsList = document.getElementById("productSpecs");
-    specsList.innerHTML = "";
-    (product.specifications || []).forEach((spec) => {
-      specsList.insertAdjacentHTML(
-        "beforeend",
-        `<li><i class="fas fa-cog"></i> <strong>${spec.key}:</strong> ${spec.value}</li>`
-      );
-    });
-    const materialSpec = product.specifications.find(
+    currentProductName = product.name; // CHANGED: Store product name
+    const imageUrl = `/images/${product.name}.jpg`;
+    productContainer.innerHTML = `
+      <div class="product-image-container">
+        <img id="productImage" class="product-image-large" src="${imageUrl}" alt="${
+      product.name
+    }" onerror="this.src='/images/Copper Plate.jpg'" loading="lazy" sizes="(max-width: 768px) 100vw, 50vw">
+      </div>
+      <div class="product-info">
+        <h2 id="productName">${product.name}</h2>
+        <div class="product-price">
+          Price: <span id="productPrice">${
+            typeof product.price === "string"
+              ? product.price
+              : `₹${(product.price || 0).toFixed(2)}`
+          }</span>
+          <span id="productQuantity" class="unit">${
+            product.quantity
+              ? `/ ${product.quantity.value} ${
+                  product.quantity.unit === "kg"
+                    ? "kg"
+                    : product.quantity.unit === "meter"
+                    ? "meter"
+                    : product.quantity.unit === "set"
+                    ? "set"
+                    : "item"
+                }`
+              : "/ unit"
+          }</span>
+        </div>
+        <p id="productDescription">${
+          product.description || "No description available."
+        }</p>
+        <h3>Key Features</h3>
+        <ul class="features-list" id="productFeatures">
+          ${
+            product.keyFeatures
+              ?.map(
+                (feature) =>
+                  `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
+              )
+              .join("") || "<li>No features listed.</li>"
+          }
+        </ul>
+        <h3>Specifications</h3>
+        <ul class="specs-list" id="productSpecs">
+          ${
+            product.specifications
+              ?.map(
+                (spec) =>
+                  `<li><i class="fas fa-cog"></i> <strong>${spec.key}:</strong> ${spec.value}</li>`
+              )
+              .join("") || "<li>No specifications listed.</li>"
+          }
+        </ul>
+        <div class="action-buttons">
+          <button class="enquiry-btn submit-btn" id="enquiryBtn">
+            <i class="fas fa-question-circle"></i> Enquiry
+          </button>
+          <a href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(
+            product.name
+          )}" target="_blank" class="whatsapp-btn" id="whatsappLink">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+    const materialSpec = product.specifications?.find(
       (spec) =>
         spec.key.toLowerCase().includes("material") ||
         spec.key.toLowerCase().includes("coating")
     );
-    document.getElementById("materialDescription").textContent = materialSpec
-      ? `This product is crafted with ${materialSpec.value.toLowerCase()} to ensure durability and safety. Our materials are selected to meet stringent industry standards, providing reliable performance.`
-      : "Our products are crafted with premium materials to ensure durability and safety. Specific details are tailored to meet industry requirements, providing reliable performance in various environments.";
-    const whatsappLink = document.getElementById("whatsappLink");
-    whatsappLink.href = `https://wa.me/919873906044?text=Hello%20VAISHNO%20ELECTRICALS,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(
+    technicalDescription.textContent = materialSpec
+      ? `Crafted with ${materialSpec.value.toLowerCase()} for superior durability and safety, this product meets stringent industry standards.`
+      : "Our products use premium materials to ensure longevity and safety.";
+    const benefits = generateBenefits(product);
+    benefitsGrid.innerHTML = benefits
+      .map(
+        (benefit) => `
+      <div class="benefit-card fade-in">
+        <i class="${benefit.icon}"></i>
+        <h4>${benefit.title}</h4>
+        <p>${benefit.description}</p>
+      </div>
+    `
+      )
+      .join("");
+    whatsappFloat.href = `https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(
       product.name
     )}`;
-    document.getElementById("enquiryProduct").value = product.name;
-  } catch (error) {
-    console.error("Error loading product:", error);
-    document.querySelector(".product-details .container").innerHTML = `<p>${
-      error.message || "Failed to load product details."
-    }</p>`;
+    enquiryProduct.value = product.name; // CHANGED: Retained for initial load
+    document.getElementById("enquiryBtn").addEventListener("click", openModal);
+    document
+      .getElementById("enquiryBtnTech")
+      .addEventListener("click", openModal);
+    initFadeIn();
+  } catch (err) {
+    console.error("Product load error:", err);
+    // Fallback to mock data
+    const product = mockProduct;
+    currentProductName = product.name; // CHANGED: Store product name for mock data
+    productContainer.innerHTML = `
+      <div class="product-image-container">
+        <img id="productImage" class="product-image-large" src="/images/${
+          product.name
+        }.jpg" alt="${
+      product.name
+    }" onerror="this.src='/images/placeholder.jpg'" loading="lazy" sizes="(max-width: 768px) 100vw, 50vw">
+      </div>
+      <div class="product-info">
+        <h2 id="productName">${product.name}</h2>
+        <div class="product-price">
+          Price: <span id="productPrice">${product.price}</span>
+          <span id="productQuantity" class="unit">/ ${product.quantity.value} ${
+      product.quantity.unit
+    }</span>
+        </div>
+        <p id="productDescription">${product.description}</p>
+        <h3>Key Features</h3>
+        <ul class="features-list" id="productFeatures">
+          ${product.keyFeatures
+            .map(
+              (feature) =>
+                `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
+            )
+            .join("")}
+        </ul>
+        <h3>Specifications</h3>
+        <ul class="specs-list" id="productSpecs">
+          ${product.specifications
+            .map(
+              (spec) =>
+                `<li><i class="fas fa-cog"></i> <strong>${spec.key}:</strong> ${spec.value}</li>`
+            )
+            .join("")}
+        </ul>
+        <div class="action-buttons">
+          <button class="enquiry-btn submit-btn" id="enquiryBtn">
+            <i class="fas fa-question-circle"></i> Enquiry
+          </button>
+          <a href="https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(
+            product.name
+          )}" target="_blank" class="whatsapp-btn" id="whatsappLink">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+    technicalDescription.textContent =
+      "Our products use premium materials to ensure longevity and safety.";
+    const benefits = generateBenefits(product);
+    benefitsGrid.innerHTML = benefits
+      .map(
+        (benefit) => `
+      <div class="benefit-card fade-in">
+        <i class="${benefit.icon}"></i>
+        <h4>${benefit.title}</h4>
+        <p>${benefit.description}</p>
+      </div>
+    `
+      )
+      .join("");
+    whatsappFloat.href = `https://wa.me/919873906044?text=Hello%20Vaishno%20Electricals,%20I%20have%20an%20inquiry%20about%20${encodeURIComponent(
+      product.name
+    )}`;
+    enquiryProduct.value = product.name; // CHANGED: Retained for initial load
+    document.getElementById("enquiryBtn").addEventListener("click", openModal);
+    document
+      .getElementById("enquiryBtnTech")
+      .addEventListener("click", openModal);
+    productContainer.insertAdjacentHTML(
+      "beforeend",
+      '<p style="color: #ef4444; text-align: center;">Failed to load product data. Showing sample data. <button onclick="loadProduct()" style="background: #3b82f6; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Retry</button></p>'
+    );
+    initFadeIn();
+  } finally {
+    pageLoading.classList.add("hidden");
+    setTimeout(() => (pageLoading.style.display = "none"), 500);
+  }
+}
+
+// Generate Benefits
+function generateBenefits(product) {
+  const category = product.category?.name?.toLowerCase() || "";
+  const defaultBenefits = [
+    {
+      icon: "fas fa-shield-alt",
+      title: "Enhanced Safety",
+      description: "Protects against electrical hazards.",
+    },
+    {
+      icon: "fas fa-tools",
+      title: "Easy Installation",
+      description: "Quick and simple setup.",
+    },
+    {
+      icon: "fas fa-leaf",
+      title: "Eco-Friendly",
+      description: "Sustainable materials used.",
+    },
+  ];
+  if (category.includes("earthing")) {
+    return [
+      {
+        icon: "fas fa-bolt",
+        title: "Superior Grounding",
+        description: "Reliable earthing for safety.",
+      },
+      ...defaultBenefits.slice(1),
+    ];
+  } else if (category.includes("lightning")) {
+    return [
+      {
+        icon: "fas fa-cloud-bolt",
+        title: "Lightning Protection",
+        description: "Shields from lightning strikes.",
+      },
+      ...defaultBenefits.slice(1),
+    ];
+  }
+  return defaultBenefits;
+}
+
+// Load Related Products
+async function loadRelatedProducts() {
+  const productsGrid = document.getElementById("productsGrid");
+  try {
+    const response = await fetch("/api/products");
+    if (!response.ok) throw new Error("Failed to fetch products");
+    const products = await response.json();
+    renderProducts(products);
+  } catch (err) {
+    console.error("Related products error:", err);
+    renderProducts(mockProducts);
+  }
+}
+
+function renderProducts(products) {
+  const productsGrid = document.getElementById("productsGrid");
+  productsGrid.innerHTML = "";
+  if (!products?.length) {
+    productsGrid.innerHTML = "<p>No products available.</p>";
+    return;
+  }
+  products.forEach((product) => {
+    const card = `
+            <div class="product-card fade-in">
+              <img src="/images/${product.name}.jpg" alt="${
+      product.name
+    }" class="product-image" onerror="this.src='/images/placeholder.jpg'" loading="lazy" sizes="(max-width: 768px) 100vw, 33vw">
+              <h3>${product.name}</h3>
+              <p>${product.shortDescription || "No description available."}</p>
+              <div class="product-overlay">
+                <a href="/products/${product.id}" class="product-btn">
+                  <i class="fas fa-eye"></i> View
+                </a>
+                <button class="product-btn enquiry-btn" data-product="${
+                  product.name
+                }">
+                  <i class="fas fa-question-circle"></i> Enquiry
+                </button>
+              </div>
+            </div>
+          `;
+    productsGrid.insertAdjacentHTML("beforeend", card);
+  });
+  document.querySelectorAll(".enquiry-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.getElementById("enquiryProduct").value =
+        btn.getAttribute("data-product");
+      openModal();
+    });
+  });
+  initFadeIn();
+}
+
+// Load Dropdown and Footer
+async function loadDropdownAndFooter() {
+  const dropdown = document.getElementById("productsDropdown");
+  const footerProducts = document.getElementById("footerProducts");
+  try {
+    const response = await fetch("/api/products");
+    if (!response.ok) throw new Error("Failed to fetch products");
+    const products = await response.json();
+    dropdown.innerHTML = "";
+    footerProducts.innerHTML = "";
+    if (!products?.length) {
+      dropdown.innerHTML = '<li><a href="#">No products available</a></li>';
+      return;
+    }
+    products.forEach((product, index) => {
+      const item = `<li><a href="/products/${product.id}">${product.name}</a></li>`;
+      dropdown.insertAdjacentHTML("beforeend", item);
+      if (index < 5) footerProducts.insertAdjacentHTML("beforeend", item);
+    });
+  } catch (err) {
+    console.error("Dropdown/footer error:", err);
   }
 }
 
 // Enquiry Modal
 const enquiryModal = document.getElementById("enquiryModal");
-const enquiryBtn = document.getElementById("enquiryBtn");
-const enquiryBtn2 = document.getElementById("enquiryBtn2");
-const enquiryBtn3 = document.getElementById("enquiryBtn3");
-const closeModal = document.querySelector(".close");
+const closeModalBtn = enquiryModal.querySelector(".close");
+const enquiryProductInput = document.getElementById("enquiryProduct");
 
 function openModal() {
   enquiryModal.style.display = "flex";
+  enquiryProductInput.value = currentProductName; // CHANGED: Set product name when modal opens
+  const firstFocusable = createFocusTrap(
+    "enquiryModal",
+    "input, textarea, button, .close"
+  );
+  firstFocusable.focus();
 }
 
-function closeModalFunc() {
+function closeModal() {
   enquiryModal.style.display = "none";
   document.getElementById("enquiryForm").reset();
   document.getElementById("enquirySuccess").classList.remove("active");
@@ -210,186 +579,78 @@ function closeModalFunc() {
   });
 }
 
-enquiryBtn.addEventListener("click", openModal);
-enquiryBtn2.addEventListener("click", openModal);
-enquiryBtn3.addEventListener("click", openModal);
-closeModal.addEventListener("click", closeModalFunc);
+closeModalBtn.addEventListener("click", closeModal);
 window.addEventListener("click", (e) => {
-  if (e.target === enquiryModal) closeModalFunc();
+  if (e.target === enquiryModal) closeModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && enquiryModal.style.display === "flex") closeModal();
 });
 
-// Enquiry Form Submission
-const enquiryForm = document.getElementById("enquiryForm");
-enquiryForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const loading = document.getElementById("enquiryLoading");
-  const success = document.getElementById("enquirySuccess");
-  const errorMessages = enquiryForm.querySelectorAll(".error-message");
-  errorMessages.forEach((el) => (el.style.display = "none"));
-  let hasError = false;
+// Form Validation and Submission
+function validateForm(formId) {
+  const form = document.getElementById(formId);
+  const inputs = form.querySelectorAll(
+    "input[required], textarea[required], select[required]"
+  );
+  let isValid = true;
 
-  const name = document.getElementById("enquiryName").value.trim();
-  const email = document.getElementById("enquiryEmail").value.trim();
-  const phone = document.getElementById("enquiryPhone").value.trim();
-  const product = document.getElementById("enquiryProduct").value.trim();
-  const message = document.getElementById("enquiryMessage").value.trim();
-
-  if (!name) {
-    enquiryForm.querySelector(
-      "#enquiryName + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    enquiryForm.querySelector(
-      "#enquiryEmail + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-  if (!phone || !/^[0-9]{10}$/.test(phone)) {
-    enquiryForm.querySelector(
-      "#enquiryPhone + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-  if (!message) {
-    enquiryForm.querySelector(
-      "#enquiryMessage + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-
-  if (hasError) return;
-
-  loading.classList.add("active");
-  success.classList.remove("active");
-
-  try {
-    const response = await fetch("/api/enquiry", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, product, message }),
-    });
-    if (response.ok) {
-      success.classList.add("active");
-      enquiryForm.reset();
-      setTimeout(closeModalFunc, 2000);
+  inputs.forEach((input) => {
+    const error = input.nextElementSibling.nextElementSibling;
+    if (!input.checkValidity()) {
+      error.style.display = "block";
+      isValid = false;
     } else {
-      throw new Error("Failed to send enquiry");
+      error.style.display = "none";
     }
-  } catch (error) {
-    console.error("Error sending enquiry:", error);
-    errorMessages[0].textContent = "An error occurred. Please try again.";
-    errorMessages[0].style.display = "block";
-  } finally {
-    loading.classList.remove("active");
-  }
-});
+  });
 
-// Contact Form Submission
-const contactForm = document.getElementById("contactForm");
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const loading = document.getElementById("contactLoading");
-  const success = document.getElementById("contactSuccess");
-  const errorMessages = contactForm.querySelectorAll(".error-message");
-  errorMessages.forEach((el) => (el.style.display = "none"));
-  let hasError = false;
-
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const inquiry = document.getElementById("inquiry").value;
-  const message = document.getElementById("message").value.trim();
-
-  if (!name) {
-    contactForm.querySelector("#name + label + .error-message").style.display =
-      "block";
-    hasError = true;
-  }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    contactForm.querySelector("#email + label + .error-message").style.display =
-      "block";
-    hasError = true;
-  }
-  if (!phone || !/^[0-9]{10}$/.test(phone)) {
-    contactForm.querySelector("#phone + label + .error-message").style.display =
-      "block";
-    hasError = true;
-  }
-  if (!inquiry) {
-    contactForm.querySelector(
-      "#inquiry + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-  if (!message) {
-    contactForm.querySelector(
-      "#message + label + .error-message"
-    ).style.display = "block";
-    hasError = true;
-  }
-
-  if (hasError) return;
-
-  loading.classList.add("active");
-  success.classList.remove("active");
-
-  try {
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, inquiry, message }),
-    });
-    if (response.ok) {
-      success.classList.add("active");
-      contactForm.reset();
-      setTimeout(() => success.classList.remove("active"), 3000);
-    } else {
-      throw new Error("Failed to send message");
-    }
-  } catch (error) {
-    console.error("Error sending message:", error);
-    errorMessages[0].textContent = "An error occurred. Please try again.";
-    errorMessages[0].style.display = "block";
-  } finally {
-    loading.classList.remove("active");
-  }
-});
-
-// Admin Authentication
-function authenticateAdmin() {
-  const password = document.getElementById("adminPassword").value;
-  fetch("/api/admin/authenticate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Invalid password");
-      }
-    })
-    .then((data) => {
-      localStorage.setItem("adminAuth", "true");
-      localStorage.setItem("adminToken", data.token);
-      window.location.href = "/admin";
-    })
-    .catch((error) => {
-      console.error("Authentication error:", error);
-      document.getElementById("adminPassword").value = "";
-      alert("Invalid password. Please try again.");
-    });
+  return isValid;
 }
 
-// Initialize
-window.addEventListener("load", () => {
-  document.body.style.opacity = "1";
-  loadProduct();
-  loadDropdownAndFooter();
+async function submitForm(formId, url, successMessageId, loadingId) {
+  const form = document.getElementById(formId);
+  const successMessage = document.getElementById(successMessageId);
+  const loading = document.getElementById(loadingId);
+
+  if (!validateForm(formId)) return;
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  loading.classList.add("active");
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("Submission failed");
+    form.reset();
+    successMessage.classList.add("active");
+    setTimeout(() => successMessage.classList.remove("active"), 3000);
+  } catch (err) {
+    console.error("Form submission error:", err);
+    alert("Failed to submit form. Please try again.");
+  } finally {
+    loading.classList.remove("active");
+  }
+}
+
+document.getElementById("enquiryForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  submitForm("enquiryForm", "/api/enquiry", "enquirySuccess", "enquiryLoading");
 });
 
-document.body.style.opacity = "0";
-document.body.style.transition = "opacity 0.5s ease";
+document.getElementById("contactForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  submitForm("contactForm", "/api/contact", "contactSuccess", "contactLoading");
+});
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+  loadProduct();
+  loadRelatedProducts();
+  loadDropdownAndFooter();
+  initFadeIn();
+});

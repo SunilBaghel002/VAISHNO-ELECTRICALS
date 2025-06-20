@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Panel - VAISHNO ELECTRICALS</title>
-    <link rel="shortcut icon" href="/images/logo.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/download.svg" type="image/x-icon" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -55,6 +55,26 @@
                 aria-label="Product Name"
               />
               <label for="name"><i class="fas fa-box"></i> Product Name</label>
+            </div>
+            <div class="form-group">
+              <select
+                id="category"
+                name="category"
+                required
+                aria-label="Product Category"
+              >
+                <option value="" disabled selected>Select Category</option>
+                <!-- CHANGED: Hardcoded categories to match backend enum -->
+                <option value="Earthing">Earthing</option>
+                <option value="Lightning Protection">
+                  Lightning Protection
+                </option>
+                <option value="Construction Use">Construction Use</option>
+                <option value="Other">Other</option>
+              </select>
+              <label for="category"
+                ><i class="fas fa-folder"></i> Category</label
+              >
             </div>
             <div class="form-group">
               <input
@@ -121,7 +141,7 @@
                   required
                   aria-label="Quantity Unit"
                 >
-                  <option value="" disabled selected></option>
+                  <option value="" disabled selected>Select Unit</option>
                   <option value="kg">Per Kilogram (kg)</option>
                   <option value="item">Per Item</option>
                   <option value="meter">Per Meter (m)</option>

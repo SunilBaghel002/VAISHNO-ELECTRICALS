@@ -1,19 +1,60 @@
+// Mock data for fallback if API fails
 const mockProducts = [
   {
     id: 1,
-    name: "Chemical Earthing",
+    name: "Poly Plastic Earth Pit Cover",
     shortDescription:
-      "High-quality chemical earthing solution for industrial use.",
+      "Poly Plastic Earth Pit Cover – Durable & Weatherproof Earthing Protection",
+    category: { name: "Lighting Protection" },
+    image: "/images/Poly Plastic Earth Pit Cover.jpg",
   },
   {
     id: 2,
-    name: "Lightning Arrestor",
-    shortDescription: "Advanced lightning protection system for buildings.",
+    name: "Gi Strip",
+    shortDescription:
+      "GI Strip – Galvanized Iron Flat Strip for Electrical & Construction Use",
+    category: { name: "Construction Use" },
+    image: "/images/Gi Strip.jpg",
   },
   {
     id: 3,
-    name: "Copper Electrode",
-    shortDescription: "Durable copper electrode for reliable earthing.",
+    name: "Copper Plate",
+    shortDescription:
+      "Copper Plate – High Conductivity Electrolytic Copper Sheet",
+    category: { name: "Construction Use" },
+    image: "/images/Copper Plate.jpg",
+  },
+  {
+    id: 4,
+    name: "Copper Lighting Arrester",
+    shortDescription:
+      "Copper Lightning Arrester – High-Efficiency Air Terminal for Surge Protection",
+    category: { name: "Lighting Protection" },
+    image: "/images/Copper Lighting Arrester.jpg",
+  },
+  {
+    id: 5,
+    name: "Copper Cable",
+    shortDescription:
+      "Copper Cable – High Conductivity Electrical Cable for Reliable Power Transmission",
+    category: { name: "Lighting Protection" },
+    image: "/images/Copper Cable.jpg",
+  },
+  {
+    id: 6,
+    name: "Copper Chemical Earthing",
+    shortDescription:
+      "Copper Chemical Earthing – Maintenance-Free and Long-Lasting Grounding Solution",
+    category: { name: "Earthing" },
+    image: "/images/Copper Chemical Earthing.jpg",
+  },
+  {
+    id: 7,
+    name: "GI Maintenance Free Earthing",
+    shortDescription:
+      "GI Maintenance-Free Earthing – Reliable & Cost-Effective Grounding Solution",
+    category: { name: "Earthing" },
+    image: "/images/GI Maintenance Free Earthing.jpg",
   },
 ];
 
@@ -25,78 +66,6 @@ function debounce(func, delay) {
     timeoutId = setTimeout(() => func.apply(this, args), delay);
   };
 }
-
-// Mobile Menu Toggle
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const navLinks = document.getElementById("navLinks");
-const navItems = document.querySelectorAll(".nav-item");
-
-if (mobileMenuBtn && navLinks) {
-  mobileMenuBtn.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-    const icon = mobileMenuBtn.querySelector("i");
-    icon.classList.toggle("fa-bars");
-    icon.classList.toggle("fa-times");
-    navItems.forEach((item) => item.classList.remove("active"));
-  });
-}
-
-// Dropdown Toggle for Mobile with Event Delegation
-if (navLinks) {
-  navLinks.addEventListener("click", (e) => {
-    const navItem = e.target.closest(".nav-item");
-    if (navItem && window.innerWidth <= 768) {
-      e.preventDefault();
-      const isActive = navItem.classList.contains("active");
-      navItems.forEach((item) => item.classList.remove("active"));
-      if (!isActive) {
-        navItem.classList.add("active");
-      }
-    }
-  });
-}
-
-// Close dropdowns and menu when clicking outside
-document.addEventListener("click", (e) => {
-  if (
-    !e.target.closest(".nav-item") &&
-    !e.target.closest(".mobile-menu-btn") &&
-    window.innerWidth <= 768
-  ) {
-    navItems.forEach((item) => item.classList.remove("active"));
-    if (navLinks) {
-      navLinks.classList.remove("active");
-      const icon = mobileMenuBtn?.querySelector("i");
-      if (icon) {
-        icon.classList.add("fa-bars");
-        icon.classList.remove("fa-times");
-      }
-    }
-  }
-});
-
-// Close mobile menu when clicking nav links
-navLinks?.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      navLinks.classList.remove("active");
-      const icon = mobileMenuBtn?.querySelector("i");
-      if (icon) {
-        icon.classList.add("fa-bars");
-        icon.classList.remove("fa-times");
-      }
-      navItems.forEach((item) => item.classList.remove("active"));
-    }
-  });
-});
-
-// Header Scroll Effect
-const header = document.getElementById("header");
-window.addEventListener("scroll", () => {
-  if (header) {
-    header.classList.toggle("header-scrolled", window.scrollY > 100);
-  }
-});
 
 // Sticky Search Bar
 const searchContainer = document.querySelector(".search-container");
@@ -564,4 +533,3 @@ window.addEventListener("load", () => {
 
 document.body.style.opacity = "0";
 document.body.style.transition = "opacity 0.5s ease";
-
